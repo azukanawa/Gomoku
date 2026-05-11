@@ -14,6 +14,3 @@ add_executable(gomoku ${SRC_FILES})
 target_include_directories(gomoku PRIVATE
     ${PROJECT_SOURCE_DIR}/include
 )
-if(MINGW)
-    target_link_options(gomoku PRIVATE -mconsole)
-endif()
