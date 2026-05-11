@@ -16,5 +16,6 @@ int main()
         /* code */
         EndDrawing();
     }
+    CloseWindow(); // 窗口被关闭,卸载OpenGL上下文
     return 0;
 }
