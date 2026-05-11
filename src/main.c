@@ -3,4 +3,11 @@
 #include <limits.h>
 #include <stdlib.h>
 
-int main() { return 0; }
+int main()
+{
+
+    while (1)
+    {
+        /* code */
+    }
+}
