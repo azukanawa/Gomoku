@@ -1,7 +1,6 @@
 #include "Rendering.h"
 
-#include "main.h"
-
+// 函数实现
 int InitWindowSize(struct window_size* size, int width, int height) {
   size->width = width;
   size->height = height;
@@ -9,3 +8,7 @@ int InitWindowSize(struct window_size* size, int width, int height) {
   size->height_half = height / 2;
   return 0;
 }
+
+// 全局变量定义（只在这里定义一次）
+Color color_white = {255, 255, 255, 255};
+Color color_black = {0, 0, 0, 255};

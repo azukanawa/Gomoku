@@ -1,8 +1,9 @@
-#ifndef RENDING_H
-#define RENDING_H
-#include "main.h"
+#ifndef RENDERING_H
+#define RENDERING_H
+
 #include "raylib.h"
 
+// 结构体定义
 struct window_size {
   int width;
   int height;
@@ -10,8 +11,11 @@ struct window_size {
   int height_half;
 };
 
+// 函数声明
 int InitWindowSize(struct window_size* size, int width, int height);
 
-Color color_white = {255, 255, 255, 255};
-Color color_black = {0, 0, 0, 255};
-#endif  // RENDING_H
+// 全局变量声明（使用extern）
+extern Color color_white;
+extern Color color_black;
+
+#endif  // RENDERING_H

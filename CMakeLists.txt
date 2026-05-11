@@ -39,3 +39,5 @@ if(WIN32)
         WIN32_EXECUTABLE ON
     )
 endif()
+
+message(STATUS "CMake找到的源文件: ${SRC_FILES}")
