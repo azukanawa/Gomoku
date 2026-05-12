@@ -12,7 +12,9 @@ file(GLOB_RECURSE SRC_FILES
 )
 
 # 生成可执行文件
-add_executable(gomoku ${SRC_FILES})
+add_executable(gomoku ${SRC_FILES}
+    src/Button.c
+    include/Button.h)
 
 target_include_directories(gomoku PRIVATE
     ${PROJECT_SOURCE_DIR}/include
