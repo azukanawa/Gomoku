@@ -27,12 +27,13 @@ int MinInt(int a, int b);
 void InitBoard(ChessBoard* board);
 
 /**
- * @brief  判断胜负
+ * @brief 判断有没有人赢，谁赢了
  *
- * @param cb 棋盘指针
- * @param x 横坐标
- * @param y 纵坐标
- * @return Piece 返回获胜的是谁
+ * @param board 棋盘指针
+ * @param currentRow 落子行坐标
+ * @param currentCol 落子纵坐标
+ * @return Piece 获胜的是谁，EMPTY表示还没有人赢
  */
-Piece CheckWin(const ChessBoard* cb, int x, int y);
+Piece CheckWin(const ChessBoard* board, int currentRow, int currentCol);
+
 #endif
