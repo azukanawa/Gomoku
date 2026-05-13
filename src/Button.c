@@ -5,10 +5,10 @@
 // ------------------------------
 // 外部回调函数声明（告诉编译器这些函数在其他文件里）
 // ------------------------------
-extern void OnStartGame(void);
-extern void OnRestartGame(void);
-extern void OnExitGame(void);
-extern void OnUndoMove(void);
+void OnStartGame(void);
+void OnRestartGame(void);
+void OnExitGame(void);
+void OnUndoMove(void);
 
 // ------------------------------
 // 私有静态变量（只在本文件可见，不会污染全局）
@@ -159,4 +159,24 @@ Button** GetMenuButtons(int* outCount) {
 Button** GetGameButtons(int* outCount) {
   if (outCount != NULL) *outCount = gameButtonCount;
   return gameButtons;
+}
+
+void OnStartGame(void) {
+  // 暂时什么都不做
+  TraceLog(LOG_INFO, "点击了【开始游戏】按钮");
+}
+
+void OnRestartGame(void) {
+  // 暂时什么都不做
+  TraceLog(LOG_INFO, "点击了【重新开始】按钮");
+}
+
+void OnExitGame(void) {
+  // 暂时什么都不做
+  TraceLog(LOG_INFO, "点击了【退出游戏】按钮");
+}
+
+void OnUndoMove(void) {
+  // 暂时什么都不做
+  TraceLog(LOG_INFO, "点击了【悔棋】按钮");
 }
