@@ -14,4 +14,5 @@ typedef struct {
       [BOARD_SIZE];  // 棋盘，用于存储当前格子的状态（是空的，玩家一的还是玩家二的）
   int emptyCeils;  // 当前剩余空格数
 } ChessBoard;      // 棋盘结构体
+
 #endif

@@ -31,26 +31,17 @@ Button CreateButton(float x, float y, float width, float height,
                     Color colorNormal, Color colorHover, Color colorPressed,
                     Color textColor);
 
-// 更新单个按钮状态
-void UpdateButton(Button* button);
-
-// 绘制单个按钮
-void DrawButton(Button* button, Font g_chineseFont);
+void UpdateButton(Button* button);                    // 更新单个按钮状态
+void DrawButton(Button* button, Font g_chineseFont);  // 绘制单个按钮
 
 // 批量更新/绘制所有按钮
 void UpdateAllButtons(Button* buttons[], int count);
 void DrawAllButtons(Button* buttons[], int count, Font g_chineseFont);
 
-// ------------------------------
-// 你的项目专属按钮管理API
-// ------------------------------
-// 初始化所有游戏按钮（只在main开头调用一次）
-void InitAllGameButtons(void);
+void InitAllGameButtons(void);  // 仅在开头调用一次,初始化所有按钮
 
-// 获取主菜单按钮数组
-Button** GetMenuButtons(int* outCount);
+Button** GetPageButtons(int ButtonPage,
+                        int* outCount);  // 根据当前页面返回对应的按钮数组和数量
 
-// 获取游戏内按钮数组
-Button** GetGameButtons(int* outCount);
-
-#endif  // BUTTON_H
+extern int ButtonPage;  // 0表示主菜单，1表示游戏内
+#endif                  // BUTTON_H

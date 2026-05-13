@@ -2,31 +2,19 @@
 
 #include <stddef.h>
 
-// ------------------------------
-// 外部回调函数声明（告诉编译器这些函数在其他文件里）
-// ------------------------------
+#include "raylib.h"
+
+// button回调函数声明
 void OnStartGame(void);
 void OnRestartGame(void);
 void OnExitGame(void);
 void OnUndoMove(void);
 
 // ------------------------------
-// 私有静态变量（只在本文件可见，不会污染全局）
-// ------------------------------
-static Button btnStart;
-static Button btnRestart;
-static Button btnExit;
-static Button btnUndo;
-
-static Button* menuButtons[2];
-static int menuButtonCount = 2;
-
-static Button* gameButtons[2];
-static int gameButtonCount = 2;
-
-// ------------------------------
 // 核心函数实现
 // ------------------------------
+
+// 把参数填入button结构体并返回
 Button CreateButton(float x, float y, float width, float height,
                     const char* text, int fontSize, void (*onClick)(void),
                     Color colorNormal, Color colorHover, Color colorPressed,
@@ -47,7 +35,8 @@ Button CreateButton(float x, float y, float width, float height,
   return btn;
 }
 
-void UpdateButton(Button* button) {
+void UpdateButton(Button* button)  // 按钮状态更新函数
+{
   if (button == NULL) return;
 
   Vector2 mousePos = GetMousePosition();
@@ -67,7 +56,8 @@ void UpdateButton(Button* button) {
   }
 }
 
-void DrawButton(Button* button, Font g_chineseFont) {
+void DrawButton(Button* button, Font g_chineseFont)  // 绘制单个Button
+{
   if (button == NULL) return;
 
   Color currentColor;
@@ -108,22 +98,36 @@ void DrawButton(Button* button, Font g_chineseFont) {
   );
 }
 
-void UpdateAllButtons(Button* buttons[], int count) {
+void UpdateAllButtons(Button* buttons[],
+                      int count) {  // 传入Button的指针数组和数量，批量更新状态
   for (int i = 0; i < count; i++) {
     UpdateButton(buttons[i]);
   }
 }
 
-void DrawAllButtons(Button* buttons[], int count, Font g_chineseFont) {
+void DrawAllButtons(
+    Button* buttons[], int count,
+    Font g_chineseFont) {  // 传入Button的指针数组和数量，批量绘制
   for (int i = 0; i < count; i++) {
     DrawButton(buttons[i], g_chineseFont);
   }
 }
 
-// ------------------------------
-// 项目专属按钮初始化
-// ------------------------------
-void InitAllGameButtons(void) {
+// 私有静态按钮结构体
+static Button btnStart;
+static Button btnRestart;
+static Button btnExit;
+static Button btnUndo;
+
+// 指向按钮的指针数组们和按钮数量
+static Button* menuButtons[2];
+static int menuButtonCount = 2;
+static Button* gameButtons[2];
+static int gameButtonCount = 2;
+
+int ButtonPage = 0;  // 0表示主菜单，1表示游戏内
+
+void InitAllGameButtons(void) {  // 初始化所有按钮并组装成数组，供外部访问
   // 主菜单按钮
   btnStart = CreateButton(300, 200, 200, 50, "开始游戏", 24, OnStartGame,
                           (Color){76, 175, 80, 255}, (Color){56, 142, 60, 255},
@@ -151,30 +155,30 @@ void InitAllGameButtons(void) {
   gameButtons[1] = &btnUndo;
 }
 
-Button** GetMenuButtons(int* outCount) {
-  if (outCount != NULL) *outCount = menuButtonCount;
-  return menuButtons;
-}
-
-Button** GetGameButtons(int* outCount) {
-  if (outCount != NULL) *outCount = gameButtonCount;
-  return gameButtons;
+Button** GetPageButtons(
+    int ButtonPage, int* outCount) {  // 根据当前页面返回对应的按钮数组和数量
+  if (ButtonPage == 0) {              // 0是标题页
+    *outCount = menuButtonCount;
+    return menuButtons;
+  } else if (ButtonPage == 1) {
+    *outCount = gameButtonCount;  // 1是游戏内
+    return gameButtons;
+  } else {
+    return NULL;  // 无效页面
+  }
 }
 
 void OnStartGame(void) {
-  // 暂时什么都不做
+  ButtonPage = 1;
   TraceLog(LOG_INFO, "点击了【开始游戏】按钮");
 }
 
 void OnRestartGame(void) {
-  // 暂时什么都不做
+  ButtonPage = 0;
   TraceLog(LOG_INFO, "点击了【重新开始】按钮");
 }
 
-void OnExitGame(void) {
-  // 暂时什么都不做
-  TraceLog(LOG_INFO, "点击了【退出游戏】按钮");
-}
+void OnExitGame(void) { TraceLog(LOG_INFO, "点击了【退出游戏】按钮"); }
 
 void OnUndoMove(void) {
   // 暂时什么都不做
