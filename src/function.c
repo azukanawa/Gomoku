@@ -24,45 +24,45 @@ Bool IsBoardFull(const ChessBoard* board) {
   }
 }
 
-Piece CheckWin(const ChessBoard* board, int currentRow, int currentCol) {
+Piece CheckWin(const ChessBoard* board, int current_row, int current_col) {
   // 当前落子的玩家棋子类型
-  Piece currentPiece = board->board[currentRow][currentCol];
+  Piece current_piece = board->board[current_row][current_col];
 
   // 五子棋四个有效连线方向：横、竖、右下、左下
   int directions[4][2] = {{0, 1}, {1, 0}, {1, 1}, {1, -1}};
-  int directionIndex;  // 方向循环索引
+  int direction_index;  // 方向循环索引
 
   // 遍历所有连线方向
-  for (directionIndex = 0; directionIndex < 4; directionIndex++) {
-    int dirRow = directions[directionIndex][0];  // 行方向增量
-    int dirCol = directions[directionIndex][1];  // 列方向增量
-    int consecutiveCount = 1;                    // 连续同色棋子数量
+  for (direction_index = 0; direction_index < 4; direction_index++) {
+    int dir_row = directions[direction_index][0];  // 行方向增量
+    int dir_col = directions[direction_index][1];  // 列方向增量
+    int consecutive_count = 1;                     // 连续同色棋子数量
 
     // 正向延伸扫描
-    int nextRow = currentRow + dirRow;
-    int nextCol = currentCol + dirCol;
-    while (nextRow >= 0 && nextRow < BOARD_SIZE && nextCol >= 0 &&
-           nextCol < BOARD_SIZE &&
-           board->board[nextRow][nextCol] == currentPiece) {
-      consecutiveCount++;
-      nextRow += dirRow;
-      nextCol += dirCol;
+    int next_row = current_row + dir_row;
+    int next_col = current_col + dir_col;
+    while (next_row >= 0 && next_row < BOARD_SIZE && next_col >= 0 &&
+           next_col < BOARD_SIZE &&
+           board->board[next_row][next_col] == current_piece) {
+      consecutive_count++;
+      next_row += dir_row;
+      next_col += dir_col;
     }
 
     // 反向延伸扫描
-    nextRow = currentRow - dirRow;
-    nextCol = currentCol - dirCol;
-    while (nextRow >= 0 && nextRow < BOARD_SIZE && nextCol >= 0 &&
-           nextCol < BOARD_SIZE &&
-           board->board[nextRow][nextCol] == currentPiece) {
-      consecutiveCount++;
-      nextRow -= dirRow;
-      nextCol -= dirCol;
+    next_row = current_row - dir_row;
+    next_col = current_col - dir_col;
+    while (next_row >= 0 && next_row < BOARD_SIZE && next_col >= 0 &&
+           next_col < BOARD_SIZE &&
+           board->board[next_row][next_col] == current_piece) {
+      consecutive_count++;
+      next_row -= dir_row;
+      next_col -= dir_col;
     }
 
     // 达到五子连珠，判定胜利
-    if (consecutiveCount >= 5) {
-      return currentPiece;
+    if (consecutive_count >= 5) {
+      return current_piece;
     }
   }
 
