@@ -14,6 +14,8 @@ struct window_size {
 
 // 渲染相关函数声明(按钮渲染在Button)
 int InitWindowSize(struct window_size* size, int width, int height);
+void InitChineseFont(const char* fontPath, int fontSize, const char* allText,
+                     Font* g_chineseFont);
 
 // 全局变量声明（使用extern）
 extern Color color_white;

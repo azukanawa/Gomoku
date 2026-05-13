@@ -67,7 +67,7 @@ void UpdateButton(Button* button) {
   }
 }
 
-void DrawButton(Button* button) {
+void DrawButton(Button* button, Font g_chineseFont) {
   if (button == NULL) return;
 
   Color currentColor;
@@ -89,11 +89,23 @@ void DrawButton(Button* button) {
   DrawRectangleRoundedLinesEx(button->bounds, button->borderRadius, 8,
                               button->borderThick, button->borderColor);
   // 绘制居中文字
-  int textWidth = MeasureText(button->text, button->fontSize);
-  float textX = button->bounds.x + (button->bounds.width - textWidth) / 2;
-  float textY =
-      button->bounds.y + (button->bounds.height - button->fontSize) / 2;
-  DrawText(button->text, textX, textY, button->fontSize, button->textColor);
+  Vector2 textSize = MeasureTextEx(g_chineseFont,     // 你加载的中文字体
+                                   button->text,      // 按钮文字
+                                   button->fontSize,  // 字体大小
+                                   1.0f  // 字符间距（和 DrawTextEx 保持一致）
+  );
+  float textX = button->bounds.x + (button->bounds.width - textSize.x) / 2.0f;
+  float textY = button->bounds.y + (button->bounds.height - textSize.y) / 2.0f;
+  button->bounds.y + (button->bounds.height - button->fontSize) / 2;
+  DrawTextEx(
+      g_chineseFont,  // 字体对象
+      button->text,   // 文字内容
+      (Vector2){textX,
+                textY},  // 位置：必须是 Vector2 类型，不能传两个单独的 float
+      button->fontSize,  // 字体大小
+      1.0f,              // 字符间距（推荐 1.0f）
+      button->textColor  // 文字颜色
+  );
 }
 
 void UpdateAllButtons(Button* buttons[], int count) {
@@ -102,9 +114,9 @@ void UpdateAllButtons(Button* buttons[], int count) {
   }
 }
 
-void DrawAllButtons(Button* buttons[], int count) {
+void DrawAllButtons(Button* buttons[], int count, Font g_chineseFont) {
   for (int i = 0; i < count; i++) {
-    DrawButton(buttons[i]);
+    DrawButton(buttons[i], g_chineseFont);
   }
 }
 

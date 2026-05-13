@@ -36,12 +36,17 @@ void OnUndoMove(void) {
 }
 
 int main() {  // 主函数开始
+
   // 设置渲染的基本参数
   struct window_size window_size;
   SetTargetFPS(60);  // 设置帧率为60帧每秒
   InitWindowSize(&window_size, 800, 600);
   // 初始化窗口,加载材质
   InitWindow(window_size.width, window_size.height, "五子棋游戏test");
+  // 加载字体图片音乐音效资源
+  Font g_chineseFont;
+  InitChineseFont("../res/Font/微软雅黑.ttf", 20, "开始游戏重新退出悔棋",
+                  &g_chineseFont);
   Texture ChessBoard_13 = LoadTexture("../res/Picture/chess_board_13.jpg");
   InitAllGameButtons();  // 初始化所有按钮
 
@@ -59,11 +64,13 @@ int main() {  // 主函数开始
     /* 在这里添加渲染代码 */
     DrawTexture(ChessBoard_13, 0, 0, WHITE);
     buttons = GetMenuButtons(&buttonCount);
-    DrawAllButtons(buttons, buttonCount);  // 把所有按钮画到屏幕上
+    DrawAllButtons(buttons, buttonCount,
+                   g_chineseFont);  // 把所有按钮画到屏幕上
 
     EndDrawing();  // 窗口绘制结束
   }  // 检测到用户关闭窗口才会退出主循环
   UnloadTexture(ChessBoard_13);
+  UnloadFont(g_chineseFont);
   CloseWindow();  // 窗口被关闭,卸载OpenGL上下文
   return 0;
 }

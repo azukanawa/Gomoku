@@ -35,11 +35,11 @@ Button CreateButton(float x, float y, float width, float height,
 void UpdateButton(Button* button);
 
 // 绘制单个按钮
-void DrawButton(Button* button);
+void DrawButton(Button* button, Font g_chineseFont);
 
 // 批量更新/绘制所有按钮
 void UpdateAllButtons(Button* buttons[], int count);
-void DrawAllButtons(Button* buttons[], int count);
+void DrawAllButtons(Button* buttons[], int count, Font g_chineseFont);
 
 // ------------------------------
 // 你的项目专属按钮管理API
