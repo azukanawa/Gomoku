@@ -16,7 +16,8 @@ add_executable(gomoku ${SRC_FILES}
     src/Button.c
     include/Button.h
     src/Rendering.c
-    include/Rendering.h)
+    include/Rendering.h
+    include/main.h)
 
 target_include_directories(gomoku PRIVATE
     ${PROJECT_SOURCE_DIR}/include

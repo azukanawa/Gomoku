@@ -25,13 +25,11 @@ int main() {  // 主函数开始
 
     BeginDrawing();  // 窗口绘制开始
 
-    ClearBackground(WHITE);
-    /* 在这里添加渲染代码 */
-    DrawTexture(gameResources.chessBoard13, 0, 0, WHITE);
+    ClearBackground(WHITE);  // 1.清理显存，设置背景色为白色
+    DrawTexture(gameResources.chessBoard13, 0, 0, WHITE);  // 2,绘制棋盘背景
     DrawAllButtons(buttons, buttonCount,
                    gameResources.chineseFont);  // 把所有按钮画到屏幕上
-
-    EndDrawing();  // 窗口绘制结束
+    EndDrawing();                               // 窗口绘制结束
   }  // 检测到用户关闭窗口才会退出主循环
   UnloadGameResources(&gameResources);
   CloseWindow();  // 窗口被关闭,卸载OpenGL上下文
