@@ -1,6 +1,7 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
+#include "Rendering.h"
 #include "raylib.h"
 
 // 按钮状态枚举
@@ -38,7 +39,7 @@ void DrawButton(Button* button, Font g_chineseFont);  // 绘制单个按钮
 void UpdateAllButtons(Button* buttons[], int count);
 void DrawAllButtons(Button* buttons[], int count, Font g_chineseFont);
 
-void InitAllGameButtons(void);  // 仅在开头调用一次,初始化所有按钮
+void InitAllGameButtons(const struct window_size* winSize);
 
 Button** GetPageButtons(int ButtonPage,
                         int* outCount);  // 根据当前页面返回对应的按钮数组和数量

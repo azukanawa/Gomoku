@@ -2,6 +2,7 @@
 
 #include <stddef.h>
 
+#include "Rendering.h"
 #include "raylib.h"
 
 // button回调函数声明
@@ -127,34 +128,54 @@ static int gameButtonCount = 2;
 
 int ButtonPage = 0;  // 0表示主菜单，1表示游戏内
 
-void InitAllGameButtons(void) {  // 初始化所有按钮并组装成数组，供外部访问
-  // 主菜单按钮
-  btnStart = CreateButton(300, 200, 200, 50, "开始游戏", 24, OnStartGame,
-                          (Color){76, 175, 80, 255}, (Color){56, 142, 60, 255},
-                          (Color){27, 94, 32, 255}, WHITE);
+#define BASE_WIDTH 800
+#define BASE_HEIGHT 600
 
-  btnExit = CreateButton(300, 270, 200, 50, "退出游戏", 24, OnExitGame,
-                         (Color){244, 67, 54, 255}, (Color){211, 47, 47, 255},
-                         (Color){183, 28, 28, 255}, WHITE);
+// ✅ 和头文件声明完全一模一样
+void InitAllGameButtons(const struct window_size* winSize) {
+  // 按钮绝对尺寸（保持不变）
+  const float MENU_BTN_WIDTH = 200.0f;
+  const float MENU_BTN_HEIGHT = 50.0f;
+  const float GAME_BTN_WIDTH = 120.0f;
+  const float GAME_BTN_HEIGHT = 40.0f;
 
-  // 游戏内按钮
-  btnRestart =
-      CreateButton(650, 100, 120, 40, "重新开始", 20, OnRestartGame,
-                   (Color){33, 150, 243, 255}, (Color){25, 118, 210, 255},
-                   (Color){13, 71, 161, 255}, WHITE);
+  // 主菜单按钮（水平居中）
+  const float menuBtnX = winSize->width_half - MENU_BTN_WIDTH / 2.0f;
+  const float startBtnY = winSize->height * (200.0f / BASE_HEIGHT);
+  const float exitBtnY = winSize->height * (270.0f / BASE_HEIGHT);
 
-  btnUndo = CreateButton(650, 160, 120, 40, "悔棋", 20, OnUndoMove,
-                         (Color){255, 152, 0, 255}, (Color){245, 124, 0, 255},
-                         (Color){230, 81, 0, 255}, WHITE);
+  btnStart =
+      CreateButton(menuBtnX, startBtnY, MENU_BTN_WIDTH, MENU_BTN_HEIGHT,
+                   "开始游戏", 24, OnStartGame, (Color){76, 175, 80, 255},
+                   (Color){56, 142, 60, 255}, (Color){27, 94, 32, 255}, WHITE);
+
+  btnExit =
+      CreateButton(menuBtnX, exitBtnY, MENU_BTN_WIDTH, MENU_BTN_HEIGHT,
+                   "退出游戏", 24, OnExitGame, (Color){244, 67, 54, 255},
+                   (Color){211, 47, 47, 255}, (Color){183, 28, 28, 255}, WHITE);
+
+  // 游戏内按钮（右上角对齐）
+  const float rightMargin = 30.0f;
+  const float gameBtnX = winSize->width - rightMargin - GAME_BTN_WIDTH;
+  const float restartBtnY = winSize->height * (100.0f / BASE_HEIGHT);
+  const float undoBtnY = winSize->height * (160.0f / BASE_HEIGHT);
+
+  btnRestart = CreateButton(
+      gameBtnX, restartBtnY, GAME_BTN_WIDTH, GAME_BTN_HEIGHT, "重新开始", 20,
+      OnRestartGame, (Color){33, 150, 243, 255}, (Color){25, 118, 210, 255},
+      (Color){13, 71, 161, 255}, WHITE);
+
+  btnUndo =
+      CreateButton(gameBtnX, undoBtnY, GAME_BTN_WIDTH, GAME_BTN_HEIGHT, "悔棋",
+                   20, OnUndoMove, (Color){255, 152, 0, 255},
+                   (Color){245, 124, 0, 255}, (Color){230, 81, 0, 255}, WHITE);
 
   // 组装数组
   menuButtons[0] = &btnStart;
   menuButtons[1] = &btnExit;
-
   gameButtons[0] = &btnRestart;
   gameButtons[1] = &btnUndo;
 }
-
 Button** GetPageButtons(
     int ButtonPage, int* outCount) {  // 根据当前页面返回对应的按钮数组和数量
   if (ButtonPage == 0) {              // 0是标题页
@@ -170,6 +191,7 @@ Button** GetPageButtons(
 
 void OnStartGame(void) {
   ButtonPage = 1;
+
   TraceLog(LOG_INFO, "点击了【开始游戏】按钮");
 }
 
@@ -178,7 +200,10 @@ void OnRestartGame(void) {
   TraceLog(LOG_INFO, "点击了【重新开始】按钮");
 }
 
-void OnExitGame(void) { TraceLog(LOG_INFO, "点击了【退出游戏】按钮"); }
+void OnExitGame(void) {
+  ButtonPage = -1;  // 设置为-1表示退出游戏
+  TraceLog(LOG_INFO, "点击了【退出游戏】按钮");
+}
 
 void OnUndoMove(void) {
   // 暂时什么都不做

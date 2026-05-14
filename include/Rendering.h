@@ -6,33 +6,35 @@
 #define LINE_WIDTH 2.0f   // 网格线宽度
 #define LINE_COLOR BLACK  // 网格线颜色
 
-#include "Button.h"
 #include "raylib.h"
 
-// 结构体定义
+// 窗口大小结构体定义
 struct window_size {
   int width;
   int height;
   int width_half;
   int height_half;
 };
+// Button.C文件依赖这里定义的窗口大小结构体
+#include "Button.h"
 
 typedef struct {
   Font chineseFont;
   Texture2D chessBoard13;
   Texture2D wood1;
   Music MenuBGM;  // 背景音乐
-  //  后续新增资源都在这里添加
 } GameResources;
 
 // 渲染相关函数声明(按钮渲染在Button)
-int InitWindowSize(struct window_size* size, int width, int height);
+int InitWindowSize(struct window_size* size);
 void InitChineseFont(const char* fontPath, int fontSize, const char* allText,
                      Font* g_chineseFont);
 
 int InitGameResources(
-    GameResources* res, int windowWidth, int windowHeight,
-    const char* title);  // 初始化所有资源，成功返回0，失败返回-1
+    GameResources* res,
+    struct window_size* winSize);  // 初始化所有资源，成功返回0，失败返回-1
+
+void UpdateWindowSize(struct window_size* winSize);
 
 void UnloadGameResources(GameResources* res);  // 卸载所有资源
 

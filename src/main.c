@@ -11,27 +11,39 @@
 #include "function.h"
 
 int main() {  // 主函数开始
-  int boardTotalSize = (BOARD_SIZE - 1) * CELL_SIZE + 2 * BOARD_MARGIN;
   GameResources gameResources = {0};
-  InitGameResources(&gameResources, boardTotalSize + 300, boardTotalSize + 100,
-                    "五子棋游戏test");
   struct window_size window_size;
-  InitWindowSize(&window_size, boardTotalSize + 300, boardTotalSize + 100);
+  InitWindowSize(&window_size);
+  InitGameResources(&gameResources, &window_size);
+  Music* currentBGM = &gameResources.MenuBGM;
+
   Button** buttons;
   int buttonCount = 0;
 
   PlayMusicStream(gameResources.MenuBGM);
-  while (!WindowShouldClose()) {  // 主循环从此处开始
+  while (!WindowShouldClose() && ButtonPage != -1) {  // 主循环从此处开始
 
-    /* 在这里添加逻辑代码 */
-    UpdateMusicStream(
-        gameResources
-            .MenuBGM);  // 更新音乐流（必须在主循环中调用以保持音乐播放）
+    // 帧逻辑更新开始
+    UpdateMusicStream(gameResources.MenuBGM);  // 更新音乐流（保持音乐播放）
+
+    if (IsWindowResized()) {
+      // 1. 更新窗口大小结构体
+      UpdateWindowSize(&window_size);
+
+      // 2. 重新初始化按钮，自动计算新位置
+      InitAllGameButtons(&window_size);
+
+      // 3. 如果你有其他需要自适应的元素（比如文字、面板），在这里更新
+      TraceLog(LOG_INFO, "窗口大小改变：%dx%d", window_size.width,
+               window_size.height);
+    }
     buttons =
         GetPageButtons(ButtonPage, &buttonCount);  // 获取当前按钮页按钮数组
     UpdateAllButtons(buttons, buttonCount);        // 更新所有按钮状态
 
-    BeginDrawing();  // 窗口绘制开始
+    // 帧逻辑绘制结束
+    // 窗口绘制开始
+    BeginDrawing();
 
     ClearBackground(WHITE);  // 1.清理显存，设置背景色为白色
     DrawChessBoard(&gameResources, BOARD_SIZE,
