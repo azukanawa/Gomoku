@@ -8,11 +8,19 @@
 
 #include "Button.h"
 #include "Rendering.h"
+#include "chessBoard.h"
 #include "function.h"
 
-int main() {  // 主函数开始
-  GameResources gameResources = {0};
-  struct window_size window_size;
+// ==============================================
+// ✅ 全局变量定义（只在这里写一次，分配实际内存）
+// ==============================================
+ChessBoard g_chessBoard = {0};     // 初始化为全零
+Piece g_currentPlayer = PLAYER_1;  // 黑棋先行
+GameResources gameResources = {0};
+struct window_size window_size;
+ChessBoard chessBoard = {0};  // 初始化棋盘结构体
+int main() {                  // 主函数开始
+
   InitWindowSize(&window_size);
   InitGameResources(&gameResources, &window_size);
   Music* currentBGM = &gameResources.MenuBGM;
@@ -41,6 +49,7 @@ int main() {  // 主函数开始
         GetPageButtons(ButtonPage, &buttonCount);  // 获取当前按钮页按钮数组
     UpdateAllButtons(buttons, buttonCount);        // 更新所有按钮状态
 
+    HandleChessPlacement(BOARD_SIZE, &window_size);
     // 帧逻辑绘制结束
     // 窗口绘制开始
     BeginDrawing();
@@ -48,6 +57,8 @@ int main() {  // 主函数开始
     ClearBackground(WHITE);  // 1.清理显存，设置背景色为白色
     DrawChessBoard(&gameResources, BOARD_SIZE,
                    &window_size);  // 2.绘制棋盘（使用木纹纹理）
+    DrawAllChessPieces(&gameResources, BOARD_SIZE, &window_size);
+    DrawChessPreview(BOARD_SIZE, &window_size);
     DrawAllButtons(buttons, buttonCount,
                    gameResources.chineseFont);  // 把所有按钮画到屏幕上
     EndDrawing();                               // 窗口绘制结束

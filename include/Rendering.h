@@ -23,6 +23,7 @@ typedef struct {
   Texture2D chessBoard13;
   Texture2D wood1;
   Music MenuBGM;  // 背景音乐
+  Sound DownSound;
 } GameResources;
 
 // 渲染相关函数声明(按钮渲染在Button)
@@ -37,10 +38,6 @@ int InitGameResources(
 void UpdateWindowSize(struct window_size* winSize);
 
 void UnloadGameResources(GameResources* res);  // 卸载所有资源
-
-int DrawChessBoard(
-    const GameResources* res, int boardSize,
-    const struct window_size* winSize);  // 绘制棋盘，成功返回0，失败返回-1
 
 // 全局变量声明（使用extern）
 extern Color color_white;
