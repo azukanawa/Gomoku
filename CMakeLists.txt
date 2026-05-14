@@ -40,7 +40,7 @@ target_link_libraries(gomoku PRIVATE
     pthread
 )
 
-# Windows 图形窗口（去掉控制台）
+# Windows 图形窗口
 if(WIN32)
     set_target_properties(gomoku PROPERTIES
         WIN32_EXECUTABLE off
