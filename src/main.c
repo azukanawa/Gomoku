@@ -13,6 +13,8 @@
 int main() {  // 主函数开始
   GameResources gameResources = {0};
   InitGameResources(&gameResources, 800, 600, "五子棋游戏test");
+  struct window_size window_size;
+  InitWindowSize(&window_size, 800, 600);
   Button** buttons;
   int buttonCount = 0;
 
@@ -26,7 +28,8 @@ int main() {  // 主函数开始
     BeginDrawing();  // 窗口绘制开始
 
     ClearBackground(WHITE);  // 1.清理显存，设置背景色为白色
-    DrawTexture(gameResources.chessBoard13, 0, 0, WHITE);  // 2,绘制棋盘背景
+    DrawChessBoard(&gameResources, BOARD_SIZE,
+                   &window_size);  // 2.绘制棋盘（使用木纹纹理）
     DrawAllButtons(buttons, buttonCount,
                    gameResources.chineseFont);  // 把所有按钮画到屏幕上
     EndDrawing();                               // 窗口绘制结束

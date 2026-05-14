@@ -15,8 +15,7 @@ struct window_size {
 typedef struct {
   Font chineseFont;
   Texture2D chessBoard13;
-  // Texture2D blackChess;
-  // Texture2D whiteChess;
+  Texture2D wood1;
   // Sound clickSound;
   //  后续新增资源都在这里添加
 } GameResources;
@@ -31,6 +30,10 @@ int InitGameResources(
     const char* title);  // 初始化所有资源，成功返回0，失败返回-1
 
 void UnloadGameResources(GameResources* res);  // 卸载所有资源
+
+int DrawChessBoard(
+    const GameResources* res, int boardSize,
+    const struct window_size* winSize);  // 绘制棋盘，成功返回0，失败返回-1
 
 // 全局变量声明（使用extern）
 extern Color color_white;
