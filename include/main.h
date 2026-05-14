@@ -1,6 +1,9 @@
 #ifndef MAIN_H
 #define MAIN_H
-#define BOARD_SIZE 15  // 棋盘尺寸
+
+#define BOARD_SIZE 17  // 棋盘尺寸
+#include "Rendering.h"
+
 // 棋型评分常量
 #define SCORE_WIN 10000    // 五子连珠
 #define SCORE_LIVE4 5000   // 活四
@@ -23,5 +26,9 @@ typedef struct {
       [BOARD_SIZE]
       [BOARD_SIZE];  // 棋盘，用于存储当前格子的状态（是空的，玩家一的还是玩家二的）
   int emptyCeils;  // 当前剩余空格数
-} ChessBoard;
+} ChessBoard;      // 棋盘结构体
+
+extern ChessBoard g_chessBoard;
+extern Piece g_currentPlayer;  // 当前执子玩家
+
 #endif

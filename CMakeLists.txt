@@ -12,7 +12,14 @@ file(GLOB_RECURSE SRC_FILES
 )
 
 # 生成可执行文件
-add_executable(gomoku ${SRC_FILES})
+add_executable(gomoku ${SRC_FILES}
+    src/Button.c
+    include/Button.h
+    src/Rendering.c
+    include/Rendering.h
+    include/main.h
+    src/chessBoard.c
+    include/chessBoard.h)
 
 target_include_directories(gomoku PRIVATE
     ${PROJECT_SOURCE_DIR}/include
@@ -36,6 +43,8 @@ target_link_libraries(gomoku PRIVATE
 # Windows 图形窗口
 if(WIN32)
     set_target_properties(gomoku PROPERTIES
-        WIN32_EXECUTABLE ON
+        WIN32_EXECUTABLE off
     )
 endif()
+
+message(STATUS "CMake找到的源文件: ${SRC_FILES}")
