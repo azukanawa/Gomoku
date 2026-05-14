@@ -1,6 +1,11 @@
 #ifndef RENDERING_H
 #define RENDERING_H
 
+#define CELL_SIZE 40      // 每个格子的像素大小（标准围棋格子约40x40）
+#define BOARD_MARGIN 30   // 棋盘边缘留白（防止棋子超出边界）
+#define LINE_WIDTH 2.0f   // 网格线宽度
+#define LINE_COLOR BLACK  // 网格线颜色
+
 #include "Button.h"
 #include "raylib.h"
 
@@ -16,7 +21,7 @@ typedef struct {
   Font chineseFont;
   Texture2D chessBoard13;
   Texture2D wood1;
-  // Sound clickSound;
+  Music MenuBGM;  // 背景音乐
   //  后续新增资源都在这里添加
 } GameResources;
 

@@ -1,6 +1,6 @@
 #ifndef MAIN_H
 #define MAIN_H
-#define BOARD_SIZE 13  // 棋盘尺寸
+#define BOARD_SIZE 19  // 棋盘尺寸
 typedef enum { FALSE, TRUE } Bool;
 typedef enum {
   EMPTY,     // 空

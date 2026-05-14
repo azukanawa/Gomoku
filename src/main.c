@@ -11,16 +11,22 @@
 #include "function.h"
 
 int main() {  // 主函数开始
+  int boardTotalSize = (BOARD_SIZE - 1) * CELL_SIZE + 2 * BOARD_MARGIN;
   GameResources gameResources = {0};
-  InitGameResources(&gameResources, 800, 600, "五子棋游戏test");
+  InitGameResources(&gameResources, boardTotalSize + 300, boardTotalSize + 100,
+                    "五子棋游戏test");
   struct window_size window_size;
-  InitWindowSize(&window_size, 800, 600);
+  InitWindowSize(&window_size, boardTotalSize + 300, boardTotalSize + 100);
   Button** buttons;
   int buttonCount = 0;
 
+  PlayMusicStream(gameResources.MenuBGM);
   while (!WindowShouldClose()) {  // 主循环从此处开始
 
     /* 在这里添加逻辑代码 */
+    UpdateMusicStream(
+        gameResources
+            .MenuBGM);  // 更新音乐流（必须在主循环中调用以保持音乐播放）
     buttons =
         GetPageButtons(ButtonPage, &buttonCount);  // 获取当前按钮页按钮数组
     UpdateAllButtons(buttons, buttonCount);        // 更新所有按钮状态

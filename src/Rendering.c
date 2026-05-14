@@ -4,11 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define CELL_SIZE 40      // 每个格子的像素大小（标准围棋格子约40x40）
-#define BOARD_MARGIN 30   // 棋盘边缘留白（防止棋子超出边界）
-#define LINE_WIDTH 2.0f   // 网格线宽度
-#define LINE_COLOR BLACK  // 网格线颜色
-
 // 函数实现
 int InitWindowSize(struct window_size* size, int width, int height) {
   size->width = width;
@@ -61,9 +56,9 @@ int InitGameResources(GameResources* res, int windowWidth, int windowHeight,
     return -1;
   }
 
-  // 初始化其他资源
-  // res->blackChess = LoadTexture(...);
-  // res->whiteChess = LoadTexture(...);
+  InitAudioDevice();  // 初始化音频设备
+  res->MenuBGM = LoadMusicStream("../res/Music/周志华-紫禁城冬雪.mp3");
+  res->MenuBGM.looping = true;
 
   InitAllGameButtons();  // 按钮初始化
 
@@ -72,6 +67,8 @@ int InitGameResources(GameResources* res, int windowWidth, int windowHeight,
 
 void UnloadGameResources(GameResources* res) {
   if (res->chessBoard13.id != 0) UnloadTexture(res->chessBoard13);
+  if (res->wood1.id != 0) UnloadTexture(res->wood1);
+  if (res->MenuBGM.stream.buffer != 0) UnloadMusicStream(res->MenuBGM);
   // 卸载其他资源
   CloseWindow();
 }
