@@ -1,6 +1,12 @@
 #ifndef MAIN_H
 #define MAIN_H
 #define BOARD_SIZE 15  // 棋盘尺寸
+// 棋型评分常量
+#define SCORE_WIN 10000
+#define SCORE_LIVE4 5000
+#define SCORE_BLOCK4 2500
+#define SCORE_LIVE3 1000
+#define SCORE_LIVE2 100
 typedef enum { FALSE, TRUE } Bool;
 typedef enum {
   EMPTY,     // 空
