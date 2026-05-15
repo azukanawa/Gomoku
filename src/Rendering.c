@@ -38,7 +38,8 @@ int InitGameResources(GameResources* res, WindowSize* winSize) {
 
   // 1. 初始化字体
   InitChineseFont("../res/Font/微软雅黑.ttf", 20,
-                  "开始游戏重新退出悔棋放弃人机对战双人对战",
+                  "开始游戏重新退出悔棋放弃人机对战双人对战游戏结束，黑棋获胜！"
+                  "游戏结束，白棋获胜！游戏结束，平局！",
                   &res->chineseFont);
   // 1. 初始化字体结束
 
@@ -115,6 +116,41 @@ void RenderingBackground(void) {
       ClearBackground(WHITE);
       break;
   }
+}
+
+void DrawMessage(char* resultText) {
+  // ========== 提示框样式参数（可直接调整） ==========
+  const float boxWidth = 450.0f;
+  const float boxHeight = 100.0f;
+  const float borderRadius = 12.0f;
+  const float borderThick = 4.0f;
+  const int fontSize = 36;
+  const Color fillColor = WHITE;
+  const Color borderColor = DARKGRAY;
+  const Color textColor = BLACK;
+
+  // 计算屏幕中心位置
+  const float boxX = (GetScreenWidth() - boxWidth) / 2.0f;
+  const float boxY = (GetScreenHeight() - boxHeight) / 2.0f;
+  const Rectangle boxBounds = {boxX, boxY, boxWidth, boxHeight};
+
+  // ========== 绘制提示框 ==========
+  // 绘制填充圆角矩形
+  DrawRectangleRounded(boxBounds, borderRadius, 8, fillColor);
+
+  // 绘制圆角边框
+  DrawRectangleRoundedLinesEx(boxBounds, borderRadius, 8, borderThick,
+                              borderColor);
+
+  // 计算文字大小并居中
+  Vector2 textSize =
+      MeasureTextEx(g_gameResources.chineseFont, resultText, fontSize, 1.0f);
+  float textX = boxBounds.x + (boxBounds.width - textSize.x) / 2.0f;
+  float textY = boxBounds.y + (boxBounds.height - textSize.y) / 2.0f;
+
+  // 绘制居中文字
+  DrawTextEx(g_gameResources.chineseFont, resultText, (Vector2){textX, textY},
+             fontSize, 1.0f, textColor);
 }
 
 // 全局变量定义（只在这里定义一次）

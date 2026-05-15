@@ -3,31 +3,34 @@
 #include <stdio.h>
 
 #include "Button.h"
+#include "Rendering.h"
 #include "chessBoard.h"
 #include "function.h"
-void LocalTwoPlayerMode(void) {
+GameResult LocalTwoPlayerMode(void) {
   int row;
   int col;
+  Piece who_wins;
   if (HandleChessPlacement(&row, &col) == FALSE) {
     return;
   }
-  if (CheckWin(&g_chessBoard, row, col) == EMPTY &&
-      IsBoardFull(&g_chessBoard) == FALSE) {
-    return;
+  who_wins = CheckWin(&g_chessBoard, row, col);
+  if (who_wins == EMPTY && IsBoardFull(&g_chessBoard) == FALSE) {
+    return NOTEND;
   }
-  if (CheckWin(&g_chessBoard, row, col) == PLAYER_1) {
-    printf("black wins\n");
-  } else if (CheckWin(&g_chessBoard, row, col) == PLAYER_2) {
-    printf("white wins\n");
+  if (who_wins == PLAYER_1) {
+    return PLAYER_1_WIN;
+  } else if (who_wins == PLAYER_2) {
+    return PLAYER_2_WIN;
   } else {
-    printf("draw\n");
+    return DRAW;
   }
-  ButtonPage = 0;
+  g_currentPlayer = PLAYER_1;
 }
 
 void AiMode(void) {
   int row;
   int col;
+  Piece who_wins;
   if (g_currentPlayer == PLAYER_1) {
     if (HandleChessPlacement(&row, &col) == FALSE) {
       return;
@@ -38,17 +41,16 @@ void AiMode(void) {
     g_chessBoard.emptyCeils;
     g_currentPlayer = (g_currentPlayer == PLAYER_1) ? PLAYER_2 : PLAYER_1;
   }
-  if (CheckWin(&g_chessBoard, row, col) == EMPTY &&
-      IsBoardFull(&g_chessBoard) == FALSE) {
-    return;
+  who_wins = CheckWin(&g_chessBoard, row, col);
+  if (who_wins == EMPTY && IsBoardFull(&g_chessBoard) == FALSE) {
+    return NOTEND;
   }
-  if (CheckWin(&g_chessBoard, row, col) == PLAYER_1) {
-    printf("black wins\n");
-  } else if (CheckWin(&g_chessBoard, row, col) == PLAYER_2) {
-    printf("white wins\n");
+  if (who_wins == PLAYER_1) {
+    return PLAYER_1_WIN;
+  } else if (who_wins == PLAYER_2) {
+    return PLAYER_2_WIN;
   } else {
-    printf("draw\n");
+    return DRAW;
   }
-  ButtonPage = 0;
   g_currentPlayer = PLAYER_1;
 }

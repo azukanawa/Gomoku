@@ -17,6 +17,13 @@ typedef enum {
   PLAYER_2,  // 玩家二
 } Piece;     // 格子状态
 
+typedef enum {
+  NOTEND,        // 游戏未结束
+  PLAYER_1_WIN,  // 玩家一获胜
+  PLAYER_2_WIN,  // 玩家二获胜
+  DRAW           // 平局
+} GameResult;
+
 // 棋盘结构体
 typedef struct {
   Piece** board;   // 棋盘（是空的，玩家一的还是玩家二的）

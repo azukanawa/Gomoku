@@ -1,10 +1,15 @@
 #ifndef GAME_H
 #define GAME_H
+#include "main.h"
 /**
  * @brief 本地双人对战
  *
  */
-void LocalTwoPlayerMode(void);
+GameResult LocalTwoPlayerMode(void);
 
-void AiMode(void);
+/**
+ * @brief 人机对战模式
+ *
+ */
+GameResult AiMode(void);
 #endif
