@@ -5,4 +5,6 @@
  *
  */
 void LocalTwoPlayerMode(void);
+
+void AiMode(void);
 #endif

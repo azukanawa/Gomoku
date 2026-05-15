@@ -40,7 +40,7 @@ int main() {  // 主函数开始
 
     // 3.处理落子逻辑（如果在游戏内页面）
     if (ButtonPage == 1) {
-      LocalTwoPlayerMode();
+      AiMode();
     }
     // 4. 更新当前按钮状态
 
