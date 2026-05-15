@@ -15,9 +15,7 @@ Piece g_currentPlayer = PLAYER_1;  // 黑棋先行
 GameResources g_gameResources = {0};
 WindowSize g_window_size;
 int main() {  // 主函数开始
-  InitBoard(&g_chessBoard);
-  InitWindowSize(&g_window_size);
-  InitGameResources(&g_gameResources, &g_window_size);
+  InitAll();
   Music* currentBGM = &g_gameResources.MenuBGM;
 
   PlayMusicStream(g_gameResources.MenuBGM);

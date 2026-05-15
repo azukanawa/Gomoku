@@ -3,7 +3,7 @@
 #include <limits.h>
 #include <stdlib.h>
 
-#include "main.h"
+#include "Rendering.h"
 
 // 五子棋四个有效连线方向：横、竖、右下、左下
 static int directions[4][2] = {{0, 1}, {1, 0}, {1, 1}, {1, -1}};
@@ -343,4 +343,10 @@ void GetBestMove(ChessBoard* board, Piece player, int* best_row,
       }
     }
   }
+}
+
+void InitAll(void) {
+  InitBoard(&g_chessBoard);
+  InitWindowSize(&g_window_size);
+  InitGameResources(&g_gameResources, &g_window_size);
 }

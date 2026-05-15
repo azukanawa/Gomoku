@@ -123,4 +123,10 @@ int AlphaBeta(ChessBoard* board, int depth, int alpha, int beta,
  * @param best_col 最优位置列坐标
  */
 void GetBestMove(ChessBoard* board, Piece player, int* best_row, int* best_col);
+
+/**
+ * @brief 初始化棋盘、窗口、游戏资源
+ *
+ */
+void InitAll(void);
 #endif
