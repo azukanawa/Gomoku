@@ -11,9 +11,7 @@
 #include "chessBoard.h"
 #include "function.h"
 
-// ==============================================
-// ✅ 全局变量定义（只在这里写一次，分配实际内存）
-// ==============================================
+// 全局变量定义（只在这里写一次，分配实际内存）
 ChessBoard g_chessBoard = {0};     // 初始化为全零
 Piece g_currentPlayer = PLAYER_1;  // 黑棋先行
 GameResources gameResources = {0};
