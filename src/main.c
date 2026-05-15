@@ -27,23 +27,32 @@ int main() {  // 主函数开始
   int buttonCount = 0;
 
   PlayMusicStream(gameResources.MenuBGM);
-  while (!WindowShouldClose() && ButtonPage != -1) {  // 主循环从此处开始
+  while (!WindowShouldClose() && ButtonPage != -1) {
+    // 主循环从此处开始
 
     // 帧逻辑更新开始
-    UpdateMusicStream(gameResources.MenuBGM);  // 更新音乐流（保持音乐播放）
 
+    // 1.更新音乐流（保持音乐播放）
+    UpdateMusicStream(gameResources.MenuBGM);
+
+    // 2.更新窗口大小（如果用户调整了窗口大小）
     if (IsWindowResized()) {
       UpdateWindowSize(&window_size);
       InitAllGameButtons(&window_size);
       TraceLog(LOG_INFO, "窗口大小改变：%dx%d", window_size.width,
                window_size.height);
     }
-    buttons = GetPageButtons(ButtonPage, &buttonCount);
-    // 获取当前按钮页按钮数组
-    UpdateAllButtons(buttons, buttonCount);
-    // 更新所有按钮状态
 
-    HandleChessPlacement(g_boardSize, &window_size);
+    // 3.处理落子逻辑（如果在游戏内页面）
+    if (ButtonPage == 1) {
+      HandleChessPlacement(g_boardSize, &window_size);
+    }
+    // 4. 更新当前按钮状态
+
+    buttons = GetPageButtons(ButtonPage, &buttonCount);
+    UpdateAllButtons(buttons, buttonCount);
+    // 更新所有按钮状态结束
+
     // 帧逻辑绘制结束
     // 窗口绘制开始
     BeginDrawing();
@@ -54,7 +63,9 @@ int main() {  // 主函数开始
     // 3.绘制棋子
     DrawAllChessPieces(&gameResources, g_boardSize, &window_size);
     // 4.绘制棋子预览（半透明圆形）
-    DrawChessPreview(g_boardSize, &window_size);
+    if (ButtonPage == 1) {
+      DrawChessPreview(g_boardSize, &window_size);
+    }
     // 5.绘制按钮
     DrawAllButtons(buttons, buttonCount, gameResources.chineseFont);
     // 窗口绘制结束
