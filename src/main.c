@@ -68,7 +68,7 @@ int main() {  // 主函数开始
       case 1:
         DrawTexturePro(gameResources.Table,
                        (Rectangle){0, 0, gameResources.Table.width,
-                                   gameResources.Table.height},
+                                   gameResources.Table.height - 80},
                        (Rectangle){0, 0, window_size.width, window_size.height},
                        (Vector2){0, 0}, 0.0f, WHITE);
         DrawChessBoard(&gameResources, g_boardSize, &window_size);
