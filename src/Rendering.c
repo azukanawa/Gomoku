@@ -37,7 +37,7 @@ int InitGameResources(GameResources* res, WindowSize* winSize) {
   // 开始初始化所有资源
 
   // 1. 初始化字体
-  InitChineseFont("../res/Font/微软雅黑.ttf", 20, "开始游戏重新退出悔棋",
+  InitChineseFont("../res/Font/微软雅黑.ttf", 20, "开始游戏重新退出悔棋放弃",
                   &res->chineseFont);
   // 1. 初始化字体结束
 
@@ -55,6 +55,10 @@ int InitGameResources(GameResources* res, WindowSize* winSize) {
   res->MenuBGM = LoadMusicStream("../res/Music/周志华-紫禁城冬雪.mp3");
   res->MenuBGM.looping = true;
   SetMusicVolume(res->MenuBGM, 0.25f);  // 设置BGM音量为25%
+  res->GameBGM = LoadMusicStream("../res/Music/InGame.mp3");
+  res->GameBGM.looping = true;
+  SetMusicVolume(res->GameBGM, 0.25f);  // 设置BGM音量为25%
+  res->currentBGM = &res->MenuBGM;      // 默认当前BGM为菜单音乐
 
   // 3. 初始化音频设备结束
 

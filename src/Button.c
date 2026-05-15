@@ -163,7 +163,7 @@ void InitAllGameButtons(const struct window_size* winSize) {
   const float undoBtnY = winSize->height * (160.0f / BASE_HEIGHT);
 
   btnRestart = CreateButton(
-      gameBtnX, restartBtnY, GAME_BTN_WIDTH, GAME_BTN_HEIGHT, "重新开始", 20,
+      gameBtnX, restartBtnY, GAME_BTN_WIDTH, GAME_BTN_HEIGHT, "放弃游戏", 20,
       OnRestartGame, (Color){33, 150, 243, 255}, (Color){25, 118, 210, 255},
       (Color){13, 71, 161, 255}, WHITE);
 
@@ -195,12 +195,17 @@ Button** GetPageButtons(
 
 void OnStartGame(void) {
   ButtonPage = 1;
-
+  StopMusicStream(*g_gameResources.currentBGM);           // 停止当前BGM
+  PlayMusicStream(g_gameResources.GameBGM);               // 播放游戏内BGM
+  g_gameResources.currentBGM = &g_gameResources.GameBGM;  // 切换到游戏内BGM
   TraceLog(LOG_INFO, "点击了【开始游戏】按钮");
 }
 
 void OnRestartGame(void) {
   ButtonPage = 0;
+  StopMusicStream(*g_gameResources.currentBGM);           // 停止当前BGM
+  PlayMusicStream(g_gameResources.MenuBGM);               // 播放菜单BGM
+  g_gameResources.currentBGM = &g_gameResources.MenuBGM;  // 切换到菜单BGM
   TraceLog(LOG_INFO, "点击了【重新开始】按钮");
 }
 
