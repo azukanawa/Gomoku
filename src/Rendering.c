@@ -7,7 +7,7 @@
 #include "main.h"
 
 // 函数实现
-int InitWindowSize(struct window_size* size) {
+int InitWindowSize(WindowSize* size) {
   int boardTotalSize = (g_boardSize - 1) * CELL_SIZE + 2 * BOARD_MARGIN;
   size->width = boardTotalSize + 400;
   size->height = boardTotalSize + 200;
@@ -27,7 +27,7 @@ void InitChineseFont(const char* fontPath, int fontSize, const char* allText,
 Font g_chineseFont = {0};       // 初始化为空
 Texture2D ChessBoard_13 = {0};  // 初始化为空
 
-int InitGameResources(GameResources* res, struct window_size* winSize) {
+int InitGameResources(GameResources* res, WindowSize* winSize) {
   // 先初始化窗口
   SetTargetFPS(60);
   InitWindow(winSize->width, winSize->height, "五子棋游戏test");
@@ -78,7 +78,7 @@ void UnloadGameResources(GameResources* res) {
 }
 
 void UpdateWindowSize(
-    struct window_size* winSize) {  // 每帧更新窗口大小,重新计算元素位置
+    WindowSize* winSize) {  // 每帧更新窗口大小,重新计算元素位置
   winSize->width = GetScreenWidth();
   winSize->height = GetScreenHeight();
   winSize->width_half = winSize->width / 2;

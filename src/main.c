@@ -1,5 +1,3 @@
-#include "main.h"
-
 #include <limits.h>
 #include <raylib.h>
 #include <raymath.h>
@@ -7,7 +5,6 @@
 #include <stdlib.h>
 
 #include "Button.h"
-#include "Rendering.h"
 #include "chessBoard.h"
 #include "function.h"
 
