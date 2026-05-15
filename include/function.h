@@ -79,10 +79,10 @@ int ScanSegment(const ChessBoard* board, int start_row, int start_col, int dr,
  * @param dr 行方向参量
  * @param dc 列方向参量
  * @param piece 玩家是谁
- * @return int 1表示是，0表示否
+ * @return TRUE表示是，FALSE表示否
  */
-int IsStartOfSegment(const ChessBoard* board, int row, int col, int dr, int dc,
-                     Piece piece);
+Bool IsStartOfSegment(const ChessBoard* board, int row, int col, int dr, int dc,
+                      Piece piece);
 
 /**
  * @brief 计算整块棋盘当前玩家的净胜分
