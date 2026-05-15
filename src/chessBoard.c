@@ -149,9 +149,9 @@ Bool GetMouseChessPosition(int boardSize, const struct window_size* winSize,
  * @param winSize 窗口大小
  * @return 落子成功返回TRUE，否则返回FALSE
  */
-Bool HandleChessPlacement(int boardSize, const struct window_size* winSize) {
+Bool HandleChessPlacement(int* row_out, int* col_out) {
   int row, col;
-  if (!GetMouseChessPosition(boardSize, winSize, &row, &col)) {
+  if (!GetMouseChessPosition(g_boardSize, &g_window_size, &row, &col)) {
     return FALSE;
   }
 
@@ -169,6 +169,8 @@ Bool HandleChessPlacement(int boardSize, const struct window_size* winSize) {
       TraceLog(LOG_INFO, "落子成功：行%d，列%d，玩家%d", row, col,
                g_currentPlayer == PLAYER_1 ? 2 : 1);
       PlaySound(g_gameResources.DownSound);  // 播放落子音效
+      *row_out = row;
+      *col_out = col;
       return TRUE;
     } else {
       TraceLog(LOG_INFO, "该位置已有棋子");

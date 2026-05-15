@@ -15,6 +15,7 @@ Piece g_currentPlayer = PLAYER_1;  // 黑棋先行
 GameResources g_gameResources = {0};
 WindowSize g_window_size;
 int main() {  // 主函数开始
+  int col = 0, row = 0;
   InitAll();
 
   PlayMusicStream(g_gameResources.MenuBGM);
@@ -38,7 +39,7 @@ int main() {  // 主函数开始
 
     // 3.处理落子逻辑（如果在游戏内页面）
     if (ButtonPage == 1) {
-      HandleChessPlacement(g_boardSize, &g_window_size);
+      HandleChessPlacement(&row, &col);
     }
     // 4. 更新当前按钮状态
 

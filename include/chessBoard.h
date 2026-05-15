@@ -13,7 +13,8 @@ int DrawChessBoard(
 Bool GetMouseChessPosition(int boardSize, const struct window_size* winSize,
                            int* row, int* col);
 
-Bool HandleChessPlacement(int boardSize, const struct window_size* winSize);
+Bool HandleChessPlacement(int* row_out, int* col_out);
+// 处理鼠标落子逻辑，成功落子返回TRUE，并通过输出参数返回行列
 
 void DrawChessPreview(int boardSize, const struct window_size* winSize);
 
