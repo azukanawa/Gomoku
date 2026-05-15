@@ -2,7 +2,6 @@
 #define MAIN_H
 
 #define BOARD_SIZE 17  // 棋盘尺寸
-#include "Rendering.h"
 
 // 棋型评分常量
 #define SCORE_WIN 10000    // 五子连珠
