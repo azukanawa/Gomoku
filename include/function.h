@@ -1,6 +1,11 @@
 #ifndef FUNCTION_H
 #define FUNCTION_H
 #include "main.h"
+typedef struct {
+  int row;
+  int col;
+  int score;
+} Move;
 /**
  * @brief 求两个int中较大的数是多少
  *
@@ -129,4 +134,37 @@ void GetBestMove(ChessBoard* board, Piece player, int* best_row, int* best_col);
  *
  */
 void InitAll(void);
+
+/**
+ * @brief 对候选走法进行降序排序
+ *
+ * @param board   当前棋盘状态指针
+ * @param rows    候选走法行坐标数组（既是输入也是输出，排序后重排）
+ * @param cols    候选走法列坐标数组（既是输入也是输出，排序后重排）
+ * @param count   候选走法总数
+ * @param player  当前走棋方
+ */
+void SortMoves(ChessBoard* board, int* rows, int* cols, int count,
+               Piece player);
+
+/**
+ * @brief 生成所有有邻居的合法走法
+ *
+ * @param board  当前棋盘状态指针（只读）
+ * @param rows   输出参数，存放合法走法行坐标的数组
+ * @param cols   输出参数，存放合法走法列坐标的数组
+ * @return int   合法走法的数量
+ */
+int GenerateMoves(const ChessBoard* board, int* rows, int* cols);
+
+/**
+ * @brief 快速局部评估：计算在某空位落子后的即时收益
+ *
+ * @param board   当前棋盘状态指针
+ * @param row     落子行坐标
+ * @param col     落子列坐标
+ * @param player  落子方（PLAYER_1 或 PLAYER_2）
+ * @return int    四条线段的棋型评分总和
+ */
+int QuickScore(const ChessBoard* board, int row, int col, Piece player);
 #endif
