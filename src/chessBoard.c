@@ -168,7 +168,7 @@ Bool HandleChessPlacement(int boardSize, const struct window_size* winSize) {
 
       TraceLog(LOG_INFO, "落子成功：行%d，列%d，玩家%d", row, col,
                g_currentPlayer == PLAYER_1 ? 2 : 1);
-      PlaySound(gameResources.DownSound);  // 播放落子音效
+      PlaySound(g_gameResources.DownSound);  // 播放落子音效
       return TRUE;
     } else {
       TraceLog(LOG_INFO, "该位置已有棋子");

@@ -28,6 +28,8 @@ typedef struct {
   Sound DownSound;
 } GameResources;
 
+extern GameResources g_gameResources;  // 全局游戏资源结构体
+extern WindowSize g_window_size;       // 全局窗口尺寸结构体
 // 以下是函数声明
 
 /**
