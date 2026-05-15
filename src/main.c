@@ -33,33 +33,32 @@ int main() {  // 主函数开始
     UpdateMusicStream(gameResources.MenuBGM);  // 更新音乐流（保持音乐播放）
 
     if (IsWindowResized()) {
-      // 1. 更新窗口大小结构体
       UpdateWindowSize(&window_size);
-
-      // 2. 重新初始化按钮，自动计算新位置
       InitAllGameButtons(&window_size);
-
-      // 3. 如果你有其他需要自适应的元素（比如文字、面板），在这里更新
       TraceLog(LOG_INFO, "窗口大小改变：%dx%d", window_size.width,
                window_size.height);
     }
-    buttons =
-        GetPageButtons(ButtonPage, &buttonCount);  // 获取当前按钮页按钮数组
-    UpdateAllButtons(buttons, buttonCount);        // 更新所有按钮状态
+    buttons = GetPageButtons(ButtonPage, &buttonCount);
+    // 获取当前按钮页按钮数组
+    UpdateAllButtons(buttons, buttonCount);
+    // 更新所有按钮状态
 
     HandleChessPlacement(g_boardSize, &window_size);
     // 帧逻辑绘制结束
     // 窗口绘制开始
     BeginDrawing();
-
-    ClearBackground(WHITE);  // 1.清理显存，设置背景色为白色
-    DrawChessBoard(&gameResources, g_boardSize,
-                   &window_size);  // 2.绘制棋盘（使用木纹纹理）
+    // 1.清理显存，设置背景色为白色
+    ClearBackground(WHITE);
+    // 2.绘制棋盘（使用木纹纹理）
+    DrawChessBoard(&gameResources, g_boardSize, &window_size);
+    // 3.绘制棋子
     DrawAllChessPieces(&gameResources, g_boardSize, &window_size);
+    // 4.绘制棋子预览（半透明圆形）
     DrawChessPreview(g_boardSize, &window_size);
-    DrawAllButtons(buttons, buttonCount,
-                   gameResources.chineseFont);  // 把所有按钮画到屏幕上
-    EndDrawing();                               // 窗口绘制结束
+    // 5.绘制按钮
+    DrawAllButtons(buttons, buttonCount, gameResources.chineseFont);
+    // 窗口绘制结束
+    EndDrawing();
   }  // 检测到用户关闭窗口才会退出主循环
   FreeBoard(&g_chessBoard);
   UnloadGameResources(&gameResources);
