@@ -1,5 +1,6 @@
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
+
 #include "Rendering.h"
 #include "main.h"
 

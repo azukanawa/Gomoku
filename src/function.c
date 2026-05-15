@@ -123,8 +123,8 @@ int GetPatternScore(int piece_count, int has_skip, int left_open,
   return 0;
 }
 
-int IsStartOfSegment(const ChessBoard* board, int row, int col, int dr, int dc,
-                     Piece piece) {
+Bool IsStartOfSegment(const ChessBoard* board, int row, int col, int dr, int dc,
+                      Piece piece) {
   // 沿着反方向向前探测一格
   int prev_row = row - dr;
   int prev_col = col - dc;
@@ -133,7 +133,7 @@ int IsStartOfSegment(const ChessBoard* board, int row, int col, int dr, int dc,
   if (prev_row >= 0 && prev_row < g_boardSize && prev_col >= 0 &&
       prev_col < g_boardSize) {
     if (board->board[prev_row][prev_col] == piece) {
-      return 0;  // 不是起点
+      return FALSE;  // 不是起点
     }
   }
 
@@ -147,14 +147,14 @@ int IsStartOfSegment(const ChessBoard* board, int row, int col, int dr, int dc,
       if (prev2_row >= 0 && prev2_row < g_boardSize && prev2_col >= 0 &&
           prev2_col < g_boardSize) {
         if (board->board[prev2_row][prev2_col] == piece) {
-          return 0;  // 不是跳空棋型的起点
+          return FALSE;  // 不是跳空棋型的起点
         }
       }
     }
   }
 
   // 前一个位置是空位、敌方或边界，那当前点就是标准的起点
-  return 1;
+  return TRUE;
 }
 
 int ScanSegment(const ChessBoard* board, int start_row, int start_col, int dr,
