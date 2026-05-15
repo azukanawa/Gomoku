@@ -7,7 +7,6 @@ set(CMAKE_C_STANDARD 99)
 # 自动收集源码
 file(GLOB_RECURSE SRC_FILES
     ${PROJECT_SOURCE_DIR}/src/*.c
-    ${PROJECT_SOURCE_DIR}/src/*.cpp
 )
 
 # 生成可执行文件
