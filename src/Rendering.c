@@ -43,6 +43,7 @@ int InitGameResources(GameResources* res, struct window_size* winSize) {
 
   // 2. 初始化纹理
   res->wood1 = LoadTexture("../res/Picture/wood1.jpg");
+  res->title = LoadTexture("../res/Picture/title.png");
   // 2. 初始化纹理结束
 
   // 3. 初始化音频设备
@@ -67,7 +68,6 @@ int InitGameResources(GameResources* res, struct window_size* winSize) {
 
 void UnloadGameResources(GameResources* res) {
   TraceLog(LOG_INFO, "=== 开始卸载游戏资源 ===");
-  if (res->chessBoard13.id != 0) UnloadTexture(res->chessBoard13);
   if (res->wood1.id != 0) UnloadTexture(res->wood1);
   if (res->MenuBGM.stream.buffer != 0) UnloadMusicStream(res->MenuBGM);
   // 卸载其他资源

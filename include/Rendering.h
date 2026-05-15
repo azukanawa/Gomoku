@@ -20,8 +20,8 @@ typedef struct window_size {
 
 typedef struct {
   Font chineseFont;
-  Texture2D chessBoard13;
   Texture2D wood1;
+  Texture2D title;
   Music MenuBGM;  // 背景音乐
   Sound DownSound;
 } GameResources;

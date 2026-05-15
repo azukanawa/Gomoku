@@ -59,11 +59,22 @@ int main() {  // 主函数开始
     // 1.清理显存，设置背景色为白色
     ClearBackground(WHITE);
 
-    if (ButtonPage == 1) {
-      DrawChessBoard(&gameResources, g_boardSize, &window_size);
-      DrawChessPreview(g_boardSize, &window_size);
-      DrawAllChessPieces(&gameResources, g_boardSize, &window_size);
+    switch (ButtonPage) {
+      case 0:
+        DrawTexture(gameResources.title,
+                    window_size.width_half - gameResources.title.width / 2,
+                    window_size.height_half - 200, WHITE);
+        break;
+      case 1:
+        DrawChessBoard(&gameResources, g_boardSize, &window_size);
+        DrawChessPreview(g_boardSize, &window_size);
+        DrawAllChessPieces(&gameResources, g_boardSize, &window_size);
+        break;
+
+      default:
+        break;
     }
+
     // 5.绘制按钮
     DrawAllButtons(buttons, buttonCount, gameResources.chineseFont);
     // 窗口绘制结束
