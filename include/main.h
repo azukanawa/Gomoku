@@ -1,8 +1,8 @@
 #ifndef MAIN_H
 #define MAIN_H
-
+#include <limits.h>
 // 棋型评分常量
-#define SCORE_WIN 10000    // 五子连珠
+#define SCORE_WIN INT_MAX  // 五子连珠
 #define SCORE_LIVE4 5000   // 活四
 #define SCORE_BLOCK4 2500  // 冲四（死四、跳冲四）
 #define SCORE_LIVE3 1000   // 活三（包括跳活三）
