@@ -1,6 +1,8 @@
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
+
 #include "Rendering.h"
+#include "main.h"
 
 extern GameResources gameResources;
 // 棋盘相关函数声明
