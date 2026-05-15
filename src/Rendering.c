@@ -44,6 +44,8 @@ int InitGameResources(GameResources* res, struct window_size* winSize) {
   // 2. 初始化纹理
   res->wood1 = LoadTexture("../res/Picture/wood1.jpg");
   res->title = LoadTexture("../res/Picture/title.png");
+  res->Background = LoadTexture("../res/Picture/background.jpeg");
+  res->Table = LoadTexture("../res/Picture/table.jpg");
   // 2. 初始化纹理结束
 
   // 3. 初始化音频设备

@@ -23,12 +23,11 @@ int main() {  // 主函数开始
   InitGameResources(&gameResources, &window_size);
   Music* currentBGM = &gameResources.MenuBGM;
 
-  Button** buttons;
-  int buttonCount = 0;
-
   PlayMusicStream(gameResources.MenuBGM);
   while (!WindowShouldClose() && ButtonPage != -1) {
     // 主循环从此处开始
+    Button** buttons;
+    int buttonCount = 0;
 
     // 帧逻辑更新开始
 
@@ -57,15 +56,24 @@ int main() {  // 主函数开始
     // 窗口绘制开始
     BeginDrawing();
     // 1.清理显存，设置背景色为白色
-    ClearBackground(WHITE);
 
     switch (ButtonPage) {
       case 0:
+        DrawTexturePro(gameResources.Background,
+                       (Rectangle){0, 0, gameResources.Background.width,
+                                   gameResources.Background.height},
+                       (Rectangle){0, 0, window_size.width, window_size.height},
+                       (Vector2){0, 0}, 0.0f, WHITE);
         DrawTexture(gameResources.title,
                     window_size.width_half - gameResources.title.width / 2,
                     window_size.height_half - 200, WHITE);
         break;
       case 1:
+        DrawTexturePro(gameResources.Table,
+                       (Rectangle){0, 0, gameResources.Table.width,
+                                   gameResources.Table.height},
+                       (Rectangle){0, 0, window_size.width, window_size.height},
+                       (Vector2){0, 0}, 0.0f, WHITE);
         DrawChessBoard(&gameResources, g_boardSize, &window_size);
         DrawChessPreview(g_boardSize, &window_size);
         DrawAllChessPieces(&gameResources, g_boardSize, &window_size);

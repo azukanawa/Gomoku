@@ -22,6 +22,8 @@ typedef struct {
   Font chineseFont;
   Texture2D wood1;
   Texture2D title;
+  Texture2D Background;
+  Texture2D Table;
   Music MenuBGM;  // 背景音乐
   Sound DownSound;
 } GameResources;
