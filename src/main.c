@@ -18,7 +18,6 @@ int main() {  // 主函数开始
   InitBoard(&g_chessBoard);
   InitWindowSize(&g_window_size);
   InitGameResources(&g_gameResources, &g_window_size);
-  Music* currentBGM = &g_gameResources.MenuBGM;
 
   PlayMusicStream(g_gameResources.MenuBGM);
   while (!WindowShouldClose() && ButtonPage != -1) {
@@ -29,7 +28,7 @@ int main() {  // 主函数开始
     // 帧逻辑更新开始
 
     // 1.更新音乐流（保持音乐播放）
-    UpdateMusicStream(g_gameResources.MenuBGM);
+    UpdateMusicStream(*g_gameResources.currentBGM);
 
     // 2.更新窗口大小（如果用户调整了窗口大小）
     if (IsWindowResized()) {
@@ -55,7 +54,7 @@ int main() {  // 主函数开始
     // 1.清理显存，设置背景色为白色
 
     switch (ButtonPage) {
-      case 0:
+      case 0:  // 主菜单页面
         DrawTexturePro(
             g_gameResources.Background,
             (Rectangle){0, 0, g_gameResources.Background.width,
@@ -66,7 +65,7 @@ int main() {  // 主函数开始
                     g_window_size.width_half - g_gameResources.title.width / 2,
                     g_window_size.height_half - 200, WHITE);
         break;
-      case 1:
+      case 1:  // 游戏内页面
         DrawTexturePro(
             g_gameResources.Table,
             (Rectangle){0, 0, g_gameResources.Table.width,

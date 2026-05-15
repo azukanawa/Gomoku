@@ -24,7 +24,9 @@ typedef struct {
   Texture2D title;
   Texture2D Background;
   Texture2D Table;
-  Music MenuBGM;  // 背景音乐
+  Music MenuBGM;
+  Music GameBGM;
+  Music* currentBGM;
   Sound DownSound;
 } GameResources;
 
