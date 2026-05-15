@@ -60,10 +60,6 @@ int InitGameResources(GameResources* res, struct window_size* winSize) {
   // 4. 初始化按钮结束
 
   // 5.最后检查初始化是否成功
-  if (res->chessBoard13.id == 0) {
-    TraceLog(LOG_ERROR, "棋盘纹理加载失败");
-    return -1;
-  }
   // 5.最后检查结束
 
   return 0;

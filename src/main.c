@@ -58,13 +58,11 @@ int main() {  // 主函数开始
     BeginDrawing();
     // 1.清理显存，设置背景色为白色
     ClearBackground(WHITE);
-    // 2.绘制棋盘（使用木纹纹理）
-    DrawChessBoard(&gameResources, g_boardSize, &window_size);
-    // 3.绘制棋子
-    DrawAllChessPieces(&gameResources, g_boardSize, &window_size);
-    // 4.绘制棋子预览（半透明圆形）
+
     if (ButtonPage == 1) {
+      DrawChessBoard(&gameResources, g_boardSize, &window_size);
       DrawChessPreview(g_boardSize, &window_size);
+      DrawAllChessPieces(&gameResources, g_boardSize, &window_size);
     }
     // 5.绘制按钮
     DrawAllButtons(buttons, buttonCount, gameResources.chineseFont);
