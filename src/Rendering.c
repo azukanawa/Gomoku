@@ -34,22 +34,37 @@ int InitGameResources(GameResources* res, struct window_size* winSize) {
   SetWindowState(FLAG_WINDOW_RESIZABLE);  // 设置窗口可变分辨率
   SetWindowMinSize(800, 600);
 
-  // 初始化所有资源
+  // 开始初始化所有资源
+
+  // 1. 初始化字体
   InitChineseFont("../res/Font/微软雅黑.ttf", 20, "开始游戏重新退出悔棋",
                   &res->chineseFont);
+  // 1. 初始化字体结束
 
-  res->chessBoard13 = LoadTexture("../res/Picture/chess_board_13.jpg");
+  // 2. 初始化纹理
   res->wood1 = LoadTexture("../res/Picture/wood1.jpg");
+  // 2. 初始化纹理结束
+
+  // 3. 初始化音频设备
+  InitAudioDevice();
   res->DownSound = LoadSound("../res/Sound/落子.mp3");
+  SetSoundVolume(res->DownSound, 1.0f);  // 设置落子音效音量为200%
+  res->MenuBGM = LoadMusicStream("../res/Music/周志华-紫禁城冬雪.mp3");
+  res->MenuBGM.looping = true;
+  SetMusicVolume(res->MenuBGM, 0.25f);  // 设置BGM音量为25%
+
+  // 3. 初始化音频设备结束
+
+  // 4. 初始化按钮
+  InitAllGameButtons(winSize);
+  // 4. 初始化按钮结束
+
+  // 5.最后检查初始化是否成功
   if (res->chessBoard13.id == 0) {
     TraceLog(LOG_ERROR, "棋盘纹理加载失败");
     return -1;
   }
-
-  InitAudioDevice();  // 初始化音频设备
-  res->MenuBGM = LoadMusicStream("../res/Music/周志华-紫禁城冬雪.mp3");
-  res->MenuBGM.looping = true;
-  InitAllGameButtons(winSize);  // 首次按钮初始化
+  // 5.最后检查结束
 
   return 0;
 }

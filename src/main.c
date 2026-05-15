@@ -16,7 +16,7 @@ int g_boardSize = 13;
 ChessBoard g_chessBoard;
 Piece g_currentPlayer = PLAYER_1;  // 黑棋先行
 GameResources gameResources = {0};
-struct window_size window_size;
+WindowSize window_size;
 int main() {  // 主函数开始
   InitBoard(&g_chessBoard);
   InitWindowSize(&window_size);
