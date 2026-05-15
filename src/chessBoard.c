@@ -31,9 +31,7 @@ int DrawChessBoard(const GameResources* res, int boardSize,
     return -1;
   }
 
-  // ==========================
   // 1. 计算棋盘尺寸和居中坐标
-  // ==========================
   // 棋盘总尺寸 = (路数-1)*格子大小 + 2*边缘留白
   const float boardTotalSize = (boardSize - 1) * CELL_SIZE + 2 * BOARD_MARGIN;
 
@@ -41,9 +39,7 @@ int DrawChessBoard(const GameResources* res, int boardSize,
   const float boardX = winSize->width_half - boardTotalSize / 2.0f;
   const float boardY = winSize->height_half - boardTotalSize / 2.0f;
 
-  // ==========================
   // 2. 从木纹纹理中截取背景（高级纹理绘制）
-  // ==========================
   // 定义要截取的纹理区域（从木纹纹理左上角开始，截取boardTotalSize大小的正方形）
   Rectangle sourceRec = {
       0.0f,            // 纹理X起点
@@ -64,12 +60,10 @@ int DrawChessBoard(const GameResources* res, int boardSize,
                  WHITE             // 色调（白色不改变纹理颜色）
   );
 
-  // 可选：绘制棋盘边框（增强立体感）
+  // 绘制棋盘边框（增强立体感）
   DrawRectangleLinesEx(destRec, 3.0f, (Color){80, 50, 20, 255});
 
-  // ==========================
   // 3. 绘制棋盘网格线
-  // ==========================
   // 网格线的起始坐标（扣除边缘留白）
   const float gridStartX = boardX + BOARD_MARGIN;
   const float gridStartY = boardY + BOARD_MARGIN;
@@ -91,9 +85,7 @@ int DrawChessBoard(const GameResources* res, int boardSize,
                LINE_COLOR);
   }
 
-  // ==========================
-  // 4. 可选：绘制星位（标准围棋棋盘标记）
-  // ==========================
+  // 4.绘制星位（标准围棋棋盘标记）
   const float starRadius = 3.0f;
   // 13路棋盘星位坐标（相对于网格起点的格子索引）
   int starPositions[][2] = {{3, 3}, {3, 9}, {6, 6}, {9, 3}, {9, 9}};
