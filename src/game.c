@@ -11,7 +11,7 @@ GameResult LocalTwoPlayerMode(void) {
   int col;
   Piece who_wins;
   if (HandleChessPlacement(&row, &col) == FALSE) {
-    return;
+    return NOTEND;
   }
   who_wins = CheckWin(&g_chessBoard, row, col);
   if (who_wins == EMPTY && IsBoardFull(&g_chessBoard) == FALSE) {
@@ -24,16 +24,15 @@ GameResult LocalTwoPlayerMode(void) {
   } else {
     return DRAW;
   }
-  g_currentPlayer = PLAYER_1;
 }
 
-void AiMode(void) {
+GameResult AiMode(void) {
   int row;
   int col;
   Piece who_wins;
   if (g_currentPlayer == PLAYER_1) {
     if (HandleChessPlacement(&row, &col) == FALSE) {
-      return;
+      return NOTEND;
     }
   } else {
     GetBestMove(&g_chessBoard, g_currentPlayer, &row, &col);
@@ -52,5 +51,4 @@ void AiMode(void) {
   } else {
     return DRAW;
   }
-  g_currentPlayer = PLAYER_1;
 }

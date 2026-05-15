@@ -39,9 +39,12 @@ int main() {                   // 主函数开始
     }
 
     // 3.处理落子逻辑（如果在游戏内页面）
-    if ((ButtonPage == 1 || ButtonPage == 2) && whoWin == NOTEND) {
+    if (ButtonPage == 1 && whoWin == NOTEND) {
       whoWin = LocalTwoPlayerMode();
+    } else if (ButtonPage == 2 && whoWin == NOTEND) {
+      whoWin = AiMode();
     }
+
     // 4. 更新当前按钮状态
 
     buttons = GetPageButtons(ButtonPage, &buttonCount);
@@ -57,8 +60,11 @@ int main() {                   // 主函数开始
     // 2.根据当前页面绘制背景（菜单背景或游戏内背景）
     switch (ButtonPage) {
       case 0:  // 主菜单页面
+        whoWin = NOTEND;
+        g_currentPlayer = PLAYER_1;
         break;
       case 1:  // 游戏内页面
+      case 2:
         DrawChessBoard(&g_gameResources, g_boardSize, &g_window_size);
         if (whoWin == NOTEND) {
           DrawChessPreview(g_boardSize, &g_window_size);
@@ -80,7 +86,6 @@ int main() {                   // 主函数开始
             break;
         }
         break;
-
       default:
         break;
     }

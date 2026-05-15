@@ -12,6 +12,7 @@ void OnStartGame(void);
 void OnRestartGame(void);
 void OnExitGame(void);
 void OnUndoMove(void);
+void OnStartGame_AI(void);
 
 // ------------------------------
 // 核心函数实现
@@ -150,7 +151,7 @@ void InitAllGameButtons(const struct window_size* winSize) {
 
   btnStart_AI =
       CreateButton(menuBtnX, startBtn_AI_Y, MENU_BTN_WIDTH, MENU_BTN_HEIGHT,
-                   "人机对战", 24, OnStartGame, (Color){76, 175, 80, 255},
+                   "人机对战", 24, OnStartGame_AI, (Color){76, 175, 80, 255},
                    (Color){56, 142, 60, 255}, (Color){27, 94, 32, 255}, WHITE);
 
   btnStart =
@@ -193,8 +194,8 @@ Button** GetPageButtons(
     InitBoard(&g_chessBoard);
     *outCount = menuButtonCount;
     return menuButtons;
-  } else if (ButtonPage == 1) {
-    *outCount = gameButtonCount;  // 1是游戏内
+  } else if (ButtonPage == 1 || ButtonPage == 2) {
+    *outCount = gameButtonCount;  // 1或2是游戏内
     return gameButtons;
   } else {
     return NULL;  // 无效页面

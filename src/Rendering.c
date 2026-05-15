@@ -105,6 +105,7 @@ void RenderingBackground(void) {
                   g_window_size.height_half - 200, WHITE);
       break;
     case 1:  // 游戏内页面
+    case 2:
       DrawTexturePro(
           g_gameResources.Table,
           (Rectangle){0, 0, g_gameResources.Table.width,
