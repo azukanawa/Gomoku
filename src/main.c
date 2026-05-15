@@ -52,25 +52,12 @@ int main() {  // 主函数开始
     BeginDrawing();
     // 1.清理显存，设置背景色为白色
 
+    RenderingBackground();
+    // 2.根据当前页面绘制背景（菜单背景或游戏内背景）
     switch (ButtonPage) {
       case 0:  // 主菜单页面
-        DrawTexturePro(
-            g_gameResources.Background,
-            (Rectangle){0, 0, g_gameResources.Background.width,
-                        g_gameResources.Background.height},
-            (Rectangle){0, 0, g_window_size.width, g_window_size.height},
-            (Vector2){0, 0}, 0.0f, WHITE);
-        DrawTexture(g_gameResources.title,
-                    g_window_size.width_half - g_gameResources.title.width / 2,
-                    g_window_size.height_half - 200, WHITE);
         break;
       case 1:  // 游戏内页面
-        DrawTexturePro(
-            g_gameResources.Table,
-            (Rectangle){0, 0, g_gameResources.Table.width,
-                        g_gameResources.Table.height - 80},
-            (Rectangle){0, 0, g_window_size.width, g_window_size.height},
-            (Vector2){0, 0}, 0.0f, WHITE);
         DrawChessBoard(&g_gameResources, g_boardSize, &g_window_size);
         DrawChessPreview(g_boardSize, &g_window_size);
         DrawAllChessPieces(&g_gameResources, g_boardSize, &g_window_size);

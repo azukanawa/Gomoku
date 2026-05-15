@@ -210,7 +210,7 @@ void OnStartGame_AI(void) {
 }
 
 void OnStartGame(void) {
-  ButtonPage = 1;
+  ButtonPage = 1;                                         // 1代表双人对战
   StopMusicStream(*g_gameResources.currentBGM);           // 停止当前BGM
   PlayMusicStream(g_gameResources.GameBGM);               // 播放游戏内BGM
   g_gameResources.currentBGM = &g_gameResources.GameBGM;  // 切换到游戏内BGM
