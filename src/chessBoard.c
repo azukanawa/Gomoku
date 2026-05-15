@@ -119,7 +119,7 @@ int DrawChessBoard(const GameResources* res, int boardSize,
  * @param col 输出：对应的列（0~boardSize-1）
  * @return 鼠标在棋盘上返回TRUE，否则返回FALSE
  */
-bool GetMouseChessPosition(int boardSize, const struct window_size* winSize,
+Bool GetMouseChessPosition(int boardSize, const struct window_size* winSize,
                            int* row, int* col) {
   // 计算棋盘关键参数（和DrawChessBoard保持完全一致）
   const float boardTotalSize = (boardSize - 1) * CELL_SIZE + 2 * BOARD_MARGIN;
@@ -157,7 +157,7 @@ bool GetMouseChessPosition(int boardSize, const struct window_size* winSize,
  * @param winSize 窗口大小
  * @return 落子成功返回TRUE，否则返回FALSE
  */
-bool HandleChessPlacement(int boardSize, const struct window_size* winSize) {
+Bool HandleChessPlacement(int boardSize, const struct window_size* winSize) {
   int row, col;
   if (!GetMouseChessPosition(boardSize, winSize, &row, &col)) {
     return FALSE;
