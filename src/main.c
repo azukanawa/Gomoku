@@ -12,14 +12,13 @@
 #include "function.h"
 
 // 全局变量定义（只在这里写一次，分配实际内存）
-ChessBoard g_chessBoard = {0};     // 初始化为全零
+int g_boardSize = 13;
+ChessBoard g_chessBoard;
 Piece g_currentPlayer = PLAYER_1;  // 黑棋先行
 GameResources gameResources = {0};
 struct window_size window_size;
-ChessBoard chessBoard = {0};  // 初始化棋盘结构体
-int g_boardSize = 13;
 int main() {  // 主函数开始
-
+  InitBoard(&g_chessBoard);
   InitWindowSize(&window_size);
   InitGameResources(&gameResources, &window_size);
   Music* currentBGM = &gameResources.MenuBGM;
@@ -62,6 +61,7 @@ int main() {  // 主函数开始
                    gameResources.chineseFont);  // 把所有按钮画到屏幕上
     EndDrawing();                               // 窗口绘制结束
   }  // 检测到用户关闭窗口才会退出主循环
+  FreeBoard(&g_chessBoard);
   UnloadGameResources(&gameResources);
   CloseWindow();  // 窗口被关闭,卸载OpenGL上下文
   return 0;
