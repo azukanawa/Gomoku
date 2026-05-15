@@ -37,7 +37,8 @@ int InitGameResources(GameResources* res, WindowSize* winSize) {
   // 开始初始化所有资源
 
   // 1. 初始化字体
-  InitChineseFont("../res/Font/微软雅黑.ttf", 20, "开始游戏重新退出悔棋放弃",
+  InitChineseFont("../res/Font/微软雅黑.ttf", 20,
+                  "开始游戏重新退出悔棋放弃人机对战双人对战",
                   &res->chineseFont);
   // 1. 初始化字体结束
 
@@ -87,6 +88,33 @@ void UpdateWindowSize(
   winSize->height = GetScreenHeight();
   winSize->width_half = winSize->width / 2;
   winSize->height_half = winSize->height / 2;
+}
+
+void RenderingBackground(void) {
+  switch (ButtonPage) {
+    case 0:  // 主菜单页面
+      DrawTexturePro(
+          g_gameResources.Background,
+          (Rectangle){0, 0, g_gameResources.Background.width,
+                      g_gameResources.Background.height},
+          (Rectangle){0, 0, g_window_size.width, g_window_size.height},
+          (Vector2){0, 0}, 0.0f, WHITE);
+      DrawTexture(g_gameResources.title,
+                  g_window_size.width_half - g_gameResources.title.width / 2,
+                  g_window_size.height_half - 200, WHITE);
+      break;
+    case 1:  // 游戏内页面
+      DrawTexturePro(
+          g_gameResources.Table,
+          (Rectangle){0, 0, g_gameResources.Table.width,
+                      g_gameResources.Table.height - 80},
+          (Rectangle){0, 0, g_window_size.width, g_window_size.height},
+          (Vector2){0, 0}, 0.0f, WHITE);
+      break;
+    default:
+      ClearBackground(WHITE);
+      break;
+  }
 }
 
 // 全局变量定义（只在这里定义一次）

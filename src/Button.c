@@ -118,13 +118,14 @@ void DrawAllButtons(
 
 // 私有静态按钮结构体
 static Button btnStart;
+static Button btnStart_AI;
 static Button btnRestart;
 static Button btnExit;
 static Button btnUndo;
 
 // 指向按钮的指针数组们和按钮数量
-static Button* menuButtons[2];
-static int menuButtonCount = 2;
+static Button* menuButtons[3];
+static int menuButtonCount = 3;
 static Button* gameButtons[2];
 static int gameButtonCount = 2;
 
@@ -143,12 +144,18 @@ void InitAllGameButtons(const struct window_size* winSize) {
 
   // 主菜单按钮（水平居中）
   const float menuBtnX = winSize->width_half - MENU_BTN_WIDTH / 2.0f;
+  const float startBtn_AI_Y = winSize->height * (130.0f / BASE_HEIGHT);
   const float startBtnY = winSize->height * (200.0f / BASE_HEIGHT);
   const float exitBtnY = winSize->height * (270.0f / BASE_HEIGHT);
 
+  btnStart_AI =
+      CreateButton(menuBtnX, startBtn_AI_Y, MENU_BTN_WIDTH, MENU_BTN_HEIGHT,
+                   "人机对战", 24, OnStartGame, (Color){76, 175, 80, 255},
+                   (Color){56, 142, 60, 255}, (Color){27, 94, 32, 255}, WHITE);
+
   btnStart =
       CreateButton(menuBtnX, startBtnY, MENU_BTN_WIDTH, MENU_BTN_HEIGHT,
-                   "开始游戏", 24, OnStartGame, (Color){76, 175, 80, 255},
+                   "双人对战", 24, OnStartGame, (Color){76, 175, 80, 255},
                    (Color){56, 142, 60, 255}, (Color){27, 94, 32, 255}, WHITE);
 
   btnExit =
@@ -173,8 +180,9 @@ void InitAllGameButtons(const struct window_size* winSize) {
                    (Color){245, 124, 0, 255}, (Color){230, 81, 0, 255}, WHITE);
 
   // 组装数组
-  menuButtons[0] = &btnStart;
-  menuButtons[1] = &btnExit;
+  menuButtons[0] = &btnStart_AI;
+  menuButtons[1] = &btnStart;
+  menuButtons[2] = &btnExit;
   gameButtons[0] = &btnRestart;
   gameButtons[1] = &btnUndo;
 }
@@ -193,12 +201,20 @@ Button** GetPageButtons(
   }
 }
 
-void OnStartGame(void) {
-  ButtonPage = 1;
+void OnStartGame_AI(void) {
+  ButtonPage = 2;                                         // 2代表人机对战
   StopMusicStream(*g_gameResources.currentBGM);           // 停止当前BGM
   PlayMusicStream(g_gameResources.GameBGM);               // 播放游戏内BGM
   g_gameResources.currentBGM = &g_gameResources.GameBGM;  // 切换到游戏内BGM
-  TraceLog(LOG_INFO, "点击了【开始游戏】按钮");
+  TraceLog(LOG_INFO, "点击了【人机对战】按钮");
+}
+
+void OnStartGame(void) {
+  ButtonPage = 1;                                         // 1代表双人对战
+  StopMusicStream(*g_gameResources.currentBGM);           // 停止当前BGM
+  PlayMusicStream(g_gameResources.GameBGM);               // 播放游戏内BGM
+  g_gameResources.currentBGM = &g_gameResources.GameBGM;  // 切换到游戏内BGM
+  TraceLog(LOG_INFO, "点击了【双人对战】按钮");
 }
 
 void OnRestartGame(void) {

@@ -73,6 +73,8 @@ void UpdateWindowSize(struct window_size* winSize);
  */
 void UnloadGameResources(GameResources* res);  // 卸载所有资源
 
+void RenderingBackground(void);  // 从全局变量中获取当前页面信息，绘制背景
+
 // 全局变量声明（使用extern）
 extern Color color_white;
 extern Color color_black;
