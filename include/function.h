@@ -27,6 +27,13 @@ int MinInt(int a, int b);
 void InitBoard(ChessBoard* board);
 
 /**
+ * @brief 释放棋盘数组
+ *
+ * @param board 棋盘指针
+ */
+void FreeBoard(ChessBoard* board);
+
+/**
  * @brief 判断棋盘是否被下满了
  *
  * @param board 棋盘指针

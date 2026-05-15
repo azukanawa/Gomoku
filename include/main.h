@@ -1,8 +1,6 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#define BOARD_SIZE 17  // 棋盘尺寸
-
 // 棋型评分常量
 #define SCORE_WIN 10000    // 五子连珠
 #define SCORE_LIVE4 5000   // 活四
@@ -21,13 +19,12 @@ typedef enum {
 
 // 棋盘结构体
 typedef struct {
-  Piece board
-      [BOARD_SIZE]
-      [BOARD_SIZE];  // 棋盘，用于存储当前格子的状态（是空的，玩家一的还是玩家二的）
+  Piece** board;   // 棋盘（是空的，玩家一的还是玩家二的）
   int emptyCeils;  // 当前剩余空格数
 } ChessBoard;      // 棋盘结构体
 
 extern ChessBoard g_chessBoard;
 extern Piece g_currentPlayer;  // 当前执子玩家
+extern int g_boardSize;
 
 #endif

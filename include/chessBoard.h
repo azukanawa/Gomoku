@@ -1,6 +1,7 @@
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
 #include "Rendering.h"
+#include "main.h"
 
 extern GameResources gameResources;
 // 棋盘相关函数声明
@@ -17,7 +18,5 @@ void DrawChessPreview(int boardSize, const struct window_size* winSize);
 
 void DrawAllChessPieces(const GameResources* res, int boardSize,
                         const struct window_size* winSize);
-
-void InitChessBoard(void);
 
 #endif  // CHESSBOARD_H

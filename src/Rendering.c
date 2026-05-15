@@ -8,7 +8,7 @@
 
 // 函数实现
 int InitWindowSize(struct window_size* size) {
-  int boardTotalSize = (BOARD_SIZE - 1) * CELL_SIZE + 2 * BOARD_MARGIN;
+  int boardTotalSize = (g_boardSize - 1) * CELL_SIZE + 2 * BOARD_MARGIN;
   size->width = boardTotalSize + 400;
   size->height = boardTotalSize + 200;
   size->width_half = (boardTotalSize + 400) / 2;

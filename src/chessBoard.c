@@ -265,17 +265,3 @@ void DrawAllChessPieces(const GameResources* res, int boardSize,
     }
   }
 }
-
-/**
- * @brief 初始化棋盘
- */
-void InitChessBoard(void) {
-  // 清空棋盘
-  for (int i = 0; i < BOARD_SIZE; i++) {
-    for (int j = 0; j < BOARD_SIZE; j++) {
-      g_chessBoard.board[i][j] = EMPTY;
-    }
-  }
-  g_chessBoard.emptyCeils = BOARD_SIZE * BOARD_SIZE;
-  g_currentPlayer = PLAYER_1;  // 黑棋先行
-}

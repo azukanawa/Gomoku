@@ -1,6 +1,7 @@
 #include "function.h"
 
 #include <limits.h>
+#include <stdlib.h>
 
 #include "main.h"
 
@@ -12,14 +13,26 @@ int MaxInt(int a, int b) { return a > b ? a : b; }
 int MinInt(int a, int b) { return a < b ? a : b; }
 
 void InitBoard(ChessBoard* board) {
-  for (int i = 0; i < BOARD_SIZE; i++) {
-    for (int j = 0; j < BOARD_SIZE; j++) {
+  board->board = (Piece**)malloc(sizeof(Piece*) * g_boardSize);
+  for (int i = 0; i < g_boardSize; i++) {
+    board->board[i] = (Piece*)malloc(sizeof(Piece) * g_boardSize);
+  }
+  for (int i = 0; i < g_boardSize; i++) {
+    for (int j = 0; j < g_boardSize; j++) {
       board->board[i][j] = EMPTY;
     }
   }
-  board->emptyCeils = BOARD_SIZE * BOARD_SIZE;
+
+  board->emptyCeils = g_boardSize * g_boardSize;
 
   return;
+}
+
+void FreeBoard(ChessBoard* board) {
+  for (int i = 0; i < g_boardSize; i++) {
+    free(board->board[i]);
+  }
+  free(board->board);
 }
 
 Bool IsBoardFull(const ChessBoard* board) {
@@ -45,8 +58,8 @@ Piece CheckWin(const ChessBoard* board, int current_row, int current_col) {
     // 正向延伸扫描
     int next_row = current_row + dir_row;
     int next_col = current_col + dir_col;
-    while (next_row >= 0 && next_row < BOARD_SIZE && next_col >= 0 &&
-           next_col < BOARD_SIZE &&
+    while (next_row >= 0 && next_row < g_boardSize && next_col >= 0 &&
+           next_col < g_boardSize &&
            board->board[next_row][next_col] == current_piece) {
       consecutive_count++;
       next_row += dir_row;
@@ -56,8 +69,8 @@ Piece CheckWin(const ChessBoard* board, int current_row, int current_col) {
     // 反向延伸扫描
     next_row = current_row - dir_row;
     next_col = current_col - dir_col;
-    while (next_row >= 0 && next_row < BOARD_SIZE && next_col >= 0 &&
-           next_col < BOARD_SIZE &&
+    while (next_row >= 0 && next_row < g_boardSize && next_col >= 0 &&
+           next_col < g_boardSize &&
            board->board[next_row][next_col] == current_piece) {
       consecutive_count++;
       next_row -= dir_row;
@@ -117,22 +130,22 @@ int IsStartOfSegment(const ChessBoard* board, int row, int col, int dr, int dc,
   int prev_col = col - dc;
 
   // 如果前一个位置是己方棋子，那当前点位一定不是起点
-  if (prev_row >= 0 && prev_row < BOARD_SIZE && prev_col >= 0 &&
-      prev_col < BOARD_SIZE) {
+  if (prev_row >= 0 && prev_row < g_boardSize && prev_col >= 0 &&
+      prev_col < g_boardSize) {
     if (board->board[prev_row][prev_col] == piece) {
       return 0;  // 不是起点
     }
   }
 
   // 如果前一个位置是空格，需要看空格前面是否还有棋子
-  if (prev_row >= 0 && prev_row < BOARD_SIZE && prev_col >= 0 &&
-      prev_col < BOARD_SIZE) {
+  if (prev_row >= 0 && prev_row < g_boardSize && prev_col >= 0 &&
+      prev_col < g_boardSize) {
     if (board->board[prev_row][prev_col] == EMPTY) {
       // 再往前看一步
       int prev2_row = prev_row - dr;
       int prev2_col = prev_col - dc;
-      if (prev2_row >= 0 && prev2_row < BOARD_SIZE && prev2_col >= 0 &&
-          prev2_col < BOARD_SIZE) {
+      if (prev2_row >= 0 && prev2_row < g_boardSize && prev2_col >= 0 &&
+          prev2_col < g_boardSize) {
         if (board->board[prev2_row][prev2_col] == piece) {
           return 0;  // 不是跳空棋型的起点
         }
@@ -159,7 +172,7 @@ int ScanSegment(const ChessBoard* board, int start_row, int start_col, int dr,
     int nr = start_row + dr * step;  // 下一个扫描位置的行
     int nc = start_col + dc * step;  // 下一个扫描位置的列
     // 出界：端点被边界阻挡，right_open = 0，停止
-    if (nr < 0 || nr >= BOARD_SIZE || nc < 0 || nc >= BOARD_SIZE) {
+    if (nr < 0 || nr >= g_boardSize || nc < 0 || nc >= g_boardSize) {
       right_open = 0;
       break;
     }
@@ -191,7 +204,7 @@ int ScanSegment(const ChessBoard* board, int start_row, int start_col, int dr,
   while (1) {
     int nr = start_row - dr * step;
     int nc = start_col - dc * step;
-    if (nr < 0 || nr >= BOARD_SIZE || nc < 0 || nc >= BOARD_SIZE) {
+    if (nr < 0 || nr >= g_boardSize || nc < 0 || nc >= g_boardSize) {
       left_open = 0;  // 边界阻挡
       break;
     }
@@ -224,8 +237,8 @@ int Evaluate(const ChessBoard* board, Piece view_player) {
   for (int d = 0; d < 4; d++) {
     int dr = directions[d][0];
     int dc = directions[d][1];
-    for (int row = 0; row < BOARD_SIZE; row++) {
-      for (int col = 0; col < BOARD_SIZE; col++) {
+    for (int row = 0; row < g_boardSize; row++) {
+      for (int col = 0; col < g_boardSize; col++) {
         Piece piece = board->board[row][col];
         if (piece == EMPTY) continue;
 
@@ -254,8 +267,8 @@ int AlphaBeta(ChessBoard* board, int depth, int alpha, int beta,
   // 极大层：当前走棋方 == 最大化方
   if (current_player == maximizing_player) {
     int max_score = INT_MIN;
-    for (int row = 0; row < BOARD_SIZE; row++) {
-      for (int col = 0; col < BOARD_SIZE; col++) {
+    for (int row = 0; row < g_boardSize; row++) {
+      for (int col = 0; col < g_boardSize; col++) {
         if (board->board[row][col] == EMPTY) {
           board->board[row][col] = current_player;
           board->emptyCeils--;
@@ -278,8 +291,8 @@ int AlphaBeta(ChessBoard* board, int depth, int alpha, int beta,
   // 极小层：当前走棋方是对手
   else {
     int min_score = INT_MAX;
-    for (int row = 0; row < BOARD_SIZE; row++) {
-      for (int col = 0; col < BOARD_SIZE; col++) {
+    for (int row = 0; row < g_boardSize; row++) {
+      for (int col = 0; col < g_boardSize; col++) {
         if (board->board[row][col] == EMPTY) {
           board->board[row][col] = current_player;
           board->emptyCeils--;
@@ -304,13 +317,13 @@ int AlphaBeta(ChessBoard* board, int depth, int alpha, int beta,
 void GetBestMove(ChessBoard* board, Piece player, int* best_row,
                  int* best_col) {
   int best_score = INT_MIN;
-  *best_row = BOARD_SIZE / 2;
-  *best_col = BOARD_SIZE / 2;
+  *best_row = g_boardSize / 2;
+  *best_col = g_boardSize / 2;
 
   Piece opponent = (player == PLAYER_1) ? PLAYER_2 : PLAYER_1;
 
-  for (int row = 0; row < BOARD_SIZE; row++) {
-    for (int col = 0; col < BOARD_SIZE; col++) {
+  for (int row = 0; row < g_boardSize; row++) {
+    for (int col = 0; col < g_boardSize; col++) {
       if (board->board[row][col] == EMPTY) {
         // 模拟当前玩家落子
         board->board[row][col] = player;
