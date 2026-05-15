@@ -37,7 +37,8 @@ int InitGameResources(GameResources* res, WindowSize* winSize) {
   // 开始初始化所有资源
 
   // 1. 初始化字体
-  InitChineseFont("../res/Font/微软雅黑.ttf", 20, "开始游戏重新退出悔棋放弃",
+  InitChineseFont("../res/Font/微软雅黑.ttf", 20,
+                  "开始游戏重新退出悔棋放弃人机对战双人对战",
                   &res->chineseFont);
   // 1. 初始化字体结束
 
