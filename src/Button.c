@@ -3,6 +3,8 @@
 #include <stddef.h>
 
 #include "Rendering.h"
+#include "function.h"
+#include "main.h"
 #include "raylib.h"
 
 // button回调函数声明
@@ -179,6 +181,8 @@ void InitAllGameButtons(const struct window_size* winSize) {
 Button** GetPageButtons(
     int ButtonPage, int* outCount) {  // 根据当前页面返回对应的按钮数组和数量
   if (ButtonPage == 0) {              // 0是标题页
+    FreeBoard(&g_chessBoard);
+    InitBoard(&g_chessBoard);
     *outCount = menuButtonCount;
     return menuButtons;
   } else if (ButtonPage == 1) {
