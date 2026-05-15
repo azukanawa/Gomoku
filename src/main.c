@@ -7,6 +7,7 @@
 #include "Button.h"
 #include "chessBoard.h"
 #include "function.h"
+#include "game.h"
 
 // 全局变量定义（只在这里写一次，分配实际内存）
 int g_boardSize = 13;
@@ -39,7 +40,7 @@ int main() {  // 主函数开始
 
     // 3.处理落子逻辑（如果在游戏内页面）
     if (ButtonPage == 1) {
-      HandleChessPlacement(&row, &col);
+      LocalTwoPlayerMode();
     }
     // 4. 更新当前按钮状态
 
