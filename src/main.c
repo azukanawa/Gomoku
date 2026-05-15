@@ -15,8 +15,8 @@ ChessBoard g_chessBoard;
 Piece g_currentPlayer = PLAYER_1;  // 黑棋先行
 GameResources g_gameResources = {0};
 WindowSize g_window_size;
-int main() {  // 主函数开始
-  int col = 0, row = 0;
+int main() {                   // 主函数开始
+  GameResult whoWin = NOTEND;  // 当前游戏结果，初始为 NOTEND（未结束）
   InitAll();
 
   PlayMusicStream(g_gameResources.MenuBGM);
@@ -39,8 +39,8 @@ int main() {  // 主函数开始
     }
 
     // 3.处理落子逻辑（如果在游戏内页面）
-    if (ButtonPage == 1) {
-      LocalTwoPlayerMode();
+    if ((ButtonPage == 1 || ButtonPage == 2) && whoWin == NOTEND) {
+      whoWin = LocalTwoPlayerMode();
     }
     // 4. 更新当前按钮状态
 
@@ -60,8 +60,25 @@ int main() {  // 主函数开始
         break;
       case 1:  // 游戏内页面
         DrawChessBoard(&g_gameResources, g_boardSize, &g_window_size);
-        DrawChessPreview(g_boardSize, &g_window_size);
+        if (whoWin == NOTEND) {
+          DrawChessPreview(g_boardSize, &g_window_size);
+        }
         DrawAllChessPieces(&g_gameResources, g_boardSize, &g_window_size);
+        switch (whoWin) {
+          case NOTEND:
+            break;
+          case PLAYER_1_WIN:
+            DrawMessage("游戏结束，黑棋获胜！");
+            break;
+          case PLAYER_2_WIN:
+            DrawMessage("游戏结束，白棋获胜！");
+            break;
+          case DRAW:
+            DrawMessage("游戏结束，平局！");
+            break;
+          default:
+            break;
+        }
         break;
 
       default:

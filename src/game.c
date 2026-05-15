@@ -3,22 +3,22 @@
 #include <stdio.h>
 
 #include "Button.h"
+#include "Rendering.h"
 #include "chessBoard.h"
 #include "function.h"
-void LocalTwoPlayerMode(void) {
+GameResult LocalTwoPlayerMode(void) {
   int row;
   int col;
   HandleChessPlacement(&row, &col);
   if (CheckWin(&g_chessBoard, row, col) == EMPTY &&
       IsBoardFull(&g_chessBoard) == FALSE) {
-    return;
+    return NOTEND;  // 游戏未结束
   }
   if (CheckWin(&g_chessBoard, row, col) == PLAYER_1) {
-    printf("black wins\n");
+    return PLAYER_1_WIN;  // 游戏结束，黑棋获胜
   } else if (CheckWin(&g_chessBoard, row, col) == PLAYER_2) {
-    printf("white wins\n");
+    return PLAYER_2;  // 游戏结束，白棋获胜
   } else {
-    printf("draw\n");
+    return DRAW;  // 游戏结束，平局
   }
-  ButtonPage = 0;
 }
