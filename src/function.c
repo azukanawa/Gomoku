@@ -314,33 +314,81 @@ int AlphaBeta(ChessBoard* board, int depth, int alpha, int beta,
   }
 }
 
+typedef struct {
+  int row;
+  int col;
+  int score;
+} Move;
+
 void GetBestMove(ChessBoard* board, Piece player, int* best_row,
                  int* best_col) {
   int best_score = INT_MIN;
   *best_row = g_boardSize / 2;
   *best_col = g_boardSize / 2;
 
-  Piece opponent = (player == PLAYER_1) ? PLAYER_2 : PLAYER_1;
+  Move move_list[225];  // 候选走法
+  int move_count = 0;
 
+  // 1. 收集所有有邻居的空位
   for (int row = 0; row < g_boardSize; row++) {
     for (int col = 0; col < g_boardSize; col++) {
-      if (board->board[row][col] == EMPTY) {
-        // 模拟当前玩家落子
-        board->board[row][col] = player;
-        board->emptyCeils--;
+      if (board->board[row][col] != EMPTY) continue;
 
-        // 下一步轮到对手，最大化方仍是 player
-        int score = AlphaBeta(board, 3, INT_MIN, INT_MAX, opponent, player);
-
-        board->board[row][col] = EMPTY;
-        board->emptyCeils++;
-
-        if (score > best_score) {
-          best_score = score;
-          *best_row = row;
-          *best_col = col;
+      // 邻居检测
+      Bool has_neighbor = FALSE;
+      for (int dr = -1; dr <= 1 && !has_neighbor; dr++) {
+        for (int dc = -1; dc <= 1 && !has_neighbor; dc++) {
+          if (dr == 0 && dc == 0) continue;
+          int r = row + dr, c = col + dc;
+          if (r >= 0 && r < g_boardSize && c >= 0 && c < g_boardSize)
+            if (board->board[r][c] != EMPTY) has_neighbor = TRUE;
         }
       }
+      if (!has_neighbor) continue;
+
+      // 2. 给这个点预打分
+      board->board[row][col] = player;
+      int score = Evaluate(board, player);
+      board->board[row][col] = EMPTY;
+
+      move_list[move_count].row = row;
+      move_list[move_count].col = col;
+      move_list[move_count].score = score;
+      move_count++;
+    }
+  }
+
+  // 3. 核心优化：按分数【从大到小排序】
+  for (int i = 0; i < move_count; i++) {
+    for (int j = i + 1; j < move_count; j++) {
+      if (move_list[j].score > move_list[i].score) {
+        Move temp = move_list[i];
+        move_list[i] = move_list[j];
+        move_list[j] = temp;
+      }
+    }
+  }
+
+  // 4. 只搜前30个最好的点
+  int max_search = move_count < 30 ? move_count : 30;
+  for (int i = 0; i < max_search; i++) {
+    int row = move_list[i].row;
+    int col = move_list[i].col;
+
+    // 模拟落子
+    board->board[row][col] = player;
+    board->emptyCeils--;
+
+    int score = AlphaBeta(board, 3, INT_MIN, INT_MAX,
+                          (player == PLAYER_1) ? PLAYER_2 : PLAYER_1, player);
+
+    board->board[row][col] = EMPTY;
+    board->emptyCeils++;
+
+    if (score > best_score) {
+      best_score = score;
+      *best_row = row;
+      *best_col = col;
     }
   }
 }
