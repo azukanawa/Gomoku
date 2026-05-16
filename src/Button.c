@@ -153,8 +153,8 @@ void InitAllGameButtons(const struct window_size* winSize) {
 
   btnStart_AI =
       CreateButton(menuBtnX, startBtn_AI_Y, MENU_BTN_WIDTH, MENU_BTN_HEIGHT,
-                   "人机对战", 24, OnStartGame_AI, (Color){76, 175, 80, 255},
-                   (Color){56, 142, 60, 255}, (Color){27, 94, 32, 255}, WHITE);
+                   "人机对战", 24, OnStartGame_AI, (Color){19, 25, 184, 255},
+                   (Color){15, 20, 145, 255}, (Color){10, 13, 92, 255}, WHITE);
 
   btnStart =
       CreateButton(menuBtnX, startBtnY, MENU_BTN_WIDTH, MENU_BTN_HEIGHT,
