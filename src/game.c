@@ -13,6 +13,7 @@ GameResult LocalTwoPlayerMode(void) {
   if (HandleChessPlacement(&row, &col) == FALSE) {
     return NOTEND;
   }
+  InPositionStack(row, col, &g_positionStack);
   who_wins = CheckWin(&g_chessBoard, row, col);
   if (who_wins == EMPTY && IsBoardFull(&g_chessBoard) == FALSE) {
     return NOTEND;
@@ -34,9 +35,11 @@ GameResult AiMode(void) {
     if (HandleChessPlacement(&row, &col) == FALSE) {
       return NOTEND;
     }
+    InPositionStack(row, col, &g_positionStack);
   } else {
     GetBestMove(&g_chessBoard, g_currentPlayer, &row, &col);
     g_chessBoard.board[row][col] = g_currentPlayer;
+    InPositionStack(row, col, &g_positionStack);
     g_chessBoard.emptyCeils;
     g_currentPlayer = (g_currentPlayer == PLAYER_1) ? PLAYER_2 : PLAYER_1;
   }

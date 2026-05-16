@@ -23,6 +23,16 @@ typedef enum {
   DRAW           // 平局
 } GameResult;
 
+typedef struct {
+  int row;
+  int col;
+} Position;
+
+typedef struct {
+  Position* position;
+  int end;
+} PositionStack;
+
 // 棋盘结构体
 typedef struct {
   Piece** board;   // 棋盘（是空的，玩家一的还是玩家二的）
@@ -32,5 +42,6 @@ typedef struct {
 extern ChessBoard g_chessBoard;
 extern Piece g_currentPlayer;  // 当前执子玩家
 extern int g_boardSize;
+extern PositionStack g_positionStack;
 
 #endif

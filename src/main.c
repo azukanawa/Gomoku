@@ -15,9 +15,10 @@ ChessBoard g_chessBoard;
 Piece g_currentPlayer = PLAYER_1;  // 黑棋先行
 GameResources g_gameResources = {0};
 WindowSize g_window_size;
+PositionStack g_positionStack;
 int main() {                   // 主函数开始
   GameResult whoWin = NOTEND;  // 当前游戏结果，初始为 NOTEND（未结束）
-  InitAll();
+  InitAll(&g_positionStack);
 
   PlayMusicStream(g_gameResources.MenuBGM);
   while (!WindowShouldClose() && ButtonPage != -1) {
@@ -96,6 +97,7 @@ int main() {                   // 主函数开始
     EndDrawing();
   }  // 检测到用户关闭窗口才会退出主循环
   FreeBoard(&g_chessBoard);
+  DestroyPositionStack(&g_positionStack);
   UnloadGameResources(&g_gameResources);
   CloseWindow();  // 窗口被关闭,卸载OpenGL上下文
   return 0;
