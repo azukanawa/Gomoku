@@ -192,6 +192,8 @@ Button** GetPageButtons(
   if (ButtonPage == 0) {              // 0是标题页
     FreeBoard(&g_chessBoard);
     InitBoard(&g_chessBoard);
+    DestroyPositionStack(&g_positionStack);
+    InitPositionStack(&g_positionStack);
     *outCount = menuButtonCount;
     return menuButtons;
   } else if (ButtonPage == 1 || ButtonPage == 2) {
@@ -232,6 +234,10 @@ void OnExitGame(void) {
 }
 
 void OnUndoMove(void) {
-  // 暂时什么都不做
+  OutPositionStack(&g_positionStack);
+  if (ButtonPage == 2) {
+    OutPositionStack(&g_positionStack);
+  }
+
   TraceLog(LOG_INFO, "点击了【悔棋】按钮");
 }

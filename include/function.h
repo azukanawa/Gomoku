@@ -132,8 +132,9 @@ void GetBestMove(ChessBoard* board, Piece player, int* best_row, int* best_col);
 /**
  * @brief 初始化棋盘、窗口、游戏资源
  *
+ * @param head 悔棋所用的栈的头指针
  */
-void InitAll(void);
+void InitAll(PositionStack* head);
 
 /**
  * @brief 对候选走法进行降序排序
@@ -167,4 +168,34 @@ int GenerateMoves(const ChessBoard* board, int* rows, int* cols);
  * @return int    四条线段的棋型评分总和
  */
 int QuickScore(const ChessBoard* board, int row, int col, Piece player);
+
+/**
+ * @brief 初始化用于悔棋的坐标栈
+ *
+ * @param head
+ */
+void InitPositionStack(PositionStack* head);
+
+/**
+ * @brief 坐标入栈
+ *
+ * @param row 行坐标
+ * @param col 纵坐标
+ * @param head 栈的头指针
+ */
+void InPositionStack(int row, int col, PositionStack* head);
+
+/**
+ * @brief 坐标出栈
+ *
+ * @param head 栈的尾指针
+ */
+void OutPositionStack(PositionStack* head);
+
+/**
+ * @brief 释放栈
+ *
+ * @param head 栈头指针
+ */
+void DestroyPositionStack(PositionStack* head);
 #endif

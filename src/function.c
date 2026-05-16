@@ -515,8 +515,36 @@ void GetBestMove(ChessBoard* board, Piece player, int* best_row,
   }
 }
 
-void InitAll(void) {
+void InitPositionStack(PositionStack* head) {
+  head->end = -1;
+  head->position =
+      (Position*)malloc(sizeof(Position) * g_boardSize * g_boardSize);
+}
+
+void InPositionStack(int row, int col, PositionStack* head) {
+  head->end++;
+  head->position[head->end].col = col;
+  head->position[head->end].row = row;
+}
+
+void OutPositionStack(PositionStack* head) {
+  if (head->end > -1) {
+    int row = head->position[head->end].row;
+    int col = head->position[head->end].col;
+    head->end--;
+    g_currentPlayer = g_chessBoard.board[row][col];
+    g_chessBoard.board[row][col] = EMPTY;
+  }
+}
+
+void DestroyPositionStack(PositionStack* head) {
+  free(head->position);
+  head->end = -1;
+}
+
+void InitAll(PositionStack* head) {
   InitBoard(&g_chessBoard);
   InitWindowSize(&g_window_size);
   InitGameResources(&g_gameResources, &g_window_size);
+  InitPositionStack(head);
 }
