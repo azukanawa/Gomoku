@@ -31,11 +31,4 @@ target_link_libraries(gomoku PRIVATE
     pthread
 )
 
-# Windows 图形窗口
-if(WIN32)
-    set_target_properties(gomoku PROPERTIES
-        WIN32_EXECUTABLE off
-    )
-endif()
-
 message(STATUS "CMake找到的源文件: ${SRC_FILES}")
