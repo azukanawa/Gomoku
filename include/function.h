@@ -1,6 +1,11 @@
 #ifndef FUNCTION_H
 #define FUNCTION_H
 #include "main.h"
+typedef struct {
+  int row;
+  int col;
+  int score;
+} Move;
 /**
  * @brief 求两个int中较大的数是多少
  *
@@ -25,6 +30,13 @@ int MinInt(int a, int b);
  * @param board 棋盘指针
  */
 void InitBoard(ChessBoard* board);
+
+/**
+ * @brief 释放棋盘数组
+ *
+ * @param board 棋盘指针
+ */
+void FreeBoard(ChessBoard* board);
 
 /**
  * @brief 判断棋盘是否被下满了
@@ -79,10 +91,10 @@ int ScanSegment(const ChessBoard* board, int start_row, int start_col, int dr,
  * @param dr 行方向参量
  * @param dc 列方向参量
  * @param piece 玩家是谁
- * @return int 1表示是，0表示否
+ * @return TRUE表示是，FALSE表示否
  */
-int IsStartOfSegment(const ChessBoard* board, int row, int col, int dr, int dc,
-                     Piece piece);
+Bool IsStartOfSegment(const ChessBoard* board, int row, int col, int dr, int dc,
+                      Piece piece);
 
 /**
  * @brief 计算整块棋盘当前玩家的净胜分
@@ -116,4 +128,74 @@ int AlphaBeta(ChessBoard* board, int depth, int alpha, int beta,
  * @param best_col 最优位置列坐标
  */
 void GetBestMove(ChessBoard* board, Piece player, int* best_row, int* best_col);
+
+/**
+ * @brief 初始化棋盘、窗口、游戏资源
+ *
+ * @param head 悔棋所用的栈的头指针
+ */
+void InitAll(PositionStack* head);
+
+/**
+ * @brief 对候选走法进行降序排序
+ *
+ * @param board   当前棋盘状态指针
+ * @param rows    候选走法行坐标数组（既是输入也是输出，排序后重排）
+ * @param cols    候选走法列坐标数组（既是输入也是输出，排序后重排）
+ * @param count   候选走法总数
+ * @param player  当前走棋方
+ */
+void SortMoves(ChessBoard* board, int* rows, int* cols, int count,
+               Piece player);
+
+/**
+ * @brief 生成所有有邻居的合法走法
+ *
+ * @param board  当前棋盘状态指针（只读）
+ * @param rows   输出参数，存放合法走法行坐标的数组
+ * @param cols   输出参数，存放合法走法列坐标的数组
+ * @return int   合法走法的数量
+ */
+int GenerateMoves(const ChessBoard* board, int* rows, int* cols);
+
+/**
+ * @brief 快速局部评估：计算在某空位落子后的即时收益
+ *
+ * @param board   当前棋盘状态指针
+ * @param row     落子行坐标
+ * @param col     落子列坐标
+ * @param player  落子方（PLAYER_1 或 PLAYER_2）
+ * @return int    四条线段的棋型评分总和
+ */
+int QuickScore(const ChessBoard* board, int row, int col, Piece player);
+
+/**
+ * @brief 初始化用于悔棋的坐标栈
+ *
+ * @param head
+ */
+void InitPositionStack(PositionStack* head);
+
+/**
+ * @brief 坐标入栈
+ *
+ * @param row 行坐标
+ * @param col 纵坐标
+ * @param head 栈的头指针
+ */
+void InPositionStack(int row, int col, PositionStack* head);
+
+/**
+ * @brief 坐标出栈
+ *
+ * @param head 栈的尾指针
+ */
+void OutPositionStack(PositionStack* head);
+
+/**
+ * @brief 释放栈
+ *
+ * @param head 栈头指针
+ */
+void DestroyPositionStack(PositionStack* head);
 #endif

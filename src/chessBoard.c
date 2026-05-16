@@ -31,9 +31,7 @@ int DrawChessBoard(const GameResources* res, int boardSize,
     return -1;
   }
 
-  // ==========================
   // 1. 计算棋盘尺寸和居中坐标
-  // ==========================
   // 棋盘总尺寸 = (路数-1)*格子大小 + 2*边缘留白
   const float boardTotalSize = (boardSize - 1) * CELL_SIZE + 2 * BOARD_MARGIN;
 
@@ -41,9 +39,7 @@ int DrawChessBoard(const GameResources* res, int boardSize,
   const float boardX = winSize->width_half - boardTotalSize / 2.0f;
   const float boardY = winSize->height_half - boardTotalSize / 2.0f;
 
-  // ==========================
   // 2. 从木纹纹理中截取背景（高级纹理绘制）
-  // ==========================
   // 定义要截取的纹理区域（从木纹纹理左上角开始，截取boardTotalSize大小的正方形）
   Rectangle sourceRec = {
       0.0f,            // 纹理X起点
@@ -64,12 +60,10 @@ int DrawChessBoard(const GameResources* res, int boardSize,
                  WHITE             // 色调（白色不改变纹理颜色）
   );
 
-  // 可选：绘制棋盘边框（增强立体感）
+  // 绘制棋盘边框（增强立体感）
   DrawRectangleLinesEx(destRec, 3.0f, (Color){80, 50, 20, 255});
 
-  // ==========================
   // 3. 绘制棋盘网格线
-  // ==========================
   // 网格线的起始坐标（扣除边缘留白）
   const float gridStartX = boardX + BOARD_MARGIN;
   const float gridStartY = boardY + BOARD_MARGIN;
@@ -91,9 +85,7 @@ int DrawChessBoard(const GameResources* res, int boardSize,
                LINE_COLOR);
   }
 
-  // ==========================
-  // 4. 可选：绘制星位（标准围棋棋盘标记）
-  // ==========================
+  // 4.绘制星位（标准围棋棋盘标记）
   const float starRadius = 3.0f;
   // 13路棋盘星位坐标（相对于网格起点的格子索引）
   int starPositions[][2] = {{3, 3}, {3, 9}, {6, 6}, {9, 3}, {9, 9}};
@@ -119,7 +111,7 @@ int DrawChessBoard(const GameResources* res, int boardSize,
  * @param col 输出：对应的列（0~boardSize-1）
  * @return 鼠标在棋盘上返回TRUE，否则返回FALSE
  */
-bool GetMouseChessPosition(int boardSize, const struct window_size* winSize,
+Bool GetMouseChessPosition(int boardSize, const struct window_size* winSize,
                            int* row, int* col) {
   // 计算棋盘关键参数（和DrawChessBoard保持完全一致）
   const float boardTotalSize = (boardSize - 1) * CELL_SIZE + 2 * BOARD_MARGIN;
@@ -157,9 +149,9 @@ bool GetMouseChessPosition(int boardSize, const struct window_size* winSize,
  * @param winSize 窗口大小
  * @return 落子成功返回TRUE，否则返回FALSE
  */
-bool HandleChessPlacement(int boardSize, const struct window_size* winSize) {
+Bool HandleChessPlacement(int* row_out, int* col_out) {
   int row, col;
-  if (!GetMouseChessPosition(boardSize, winSize, &row, &col)) {
+  if (!GetMouseChessPosition(g_boardSize, &g_window_size, &row, &col)) {
     return FALSE;
   }
 
@@ -176,7 +168,9 @@ bool HandleChessPlacement(int boardSize, const struct window_size* winSize) {
 
       TraceLog(LOG_INFO, "落子成功：行%d，列%d，玩家%d", row, col,
                g_currentPlayer == PLAYER_1 ? 2 : 1);
-      PlaySound(gameResources.DownSound);  // 播放落子音效
+      PlaySound(g_gameResources.DownSound);  // 播放落子音效
+      *row_out = row;
+      *col_out = col;
       return TRUE;
     } else {
       TraceLog(LOG_INFO, "该位置已有棋子");
@@ -272,18 +266,4 @@ void DrawAllChessPieces(const GameResources* res, int boardSize,
       }
     }
   }
-}
-
-/**
- * @brief 初始化棋盘
- */
-void InitChessBoard(void) {
-  // 清空棋盘
-  for (int i = 0; i < BOARD_SIZE; i++) {
-    for (int j = 0; j < BOARD_SIZE; j++) {
-      g_chessBoard.board[i][j] = EMPTY;
-    }
-  }
-  g_chessBoard.emptyCeils = BOARD_SIZE * BOARD_SIZE;
-  g_currentPlayer = PLAYER_1;  // 黑棋先行
 }

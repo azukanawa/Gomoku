@@ -1,8 +1,9 @@
 #include "function.h"
 
 #include <limits.h>
+#include <stdlib.h>
 
-#include "main.h"
+#include "Rendering.h"
 
 // 五子棋四个有效连线方向：横、竖、右下、左下
 static int directions[4][2] = {{0, 1}, {1, 0}, {1, 1}, {1, -1}};
@@ -12,14 +13,26 @@ int MaxInt(int a, int b) { return a > b ? a : b; }
 int MinInt(int a, int b) { return a < b ? a : b; }
 
 void InitBoard(ChessBoard* board) {
-  for (int i = 0; i < BOARD_SIZE; i++) {
-    for (int j = 0; j < BOARD_SIZE; j++) {
+  board->board = (Piece**)malloc(sizeof(Piece*) * g_boardSize);
+  for (int i = 0; i < g_boardSize; i++) {
+    board->board[i] = (Piece*)malloc(sizeof(Piece) * g_boardSize);
+  }
+  for (int i = 0; i < g_boardSize; i++) {
+    for (int j = 0; j < g_boardSize; j++) {
       board->board[i][j] = EMPTY;
     }
   }
-  board->emptyCeils = BOARD_SIZE * BOARD_SIZE;
+
+  board->emptyCeils = g_boardSize * g_boardSize;
 
   return;
+}
+
+void FreeBoard(ChessBoard* board) {
+  for (int i = 0; i < g_boardSize; i++) {
+    free(board->board[i]);
+  }
+  free(board->board);
 }
 
 Bool IsBoardFull(const ChessBoard* board) {
@@ -45,8 +58,8 @@ Piece CheckWin(const ChessBoard* board, int current_row, int current_col) {
     // 正向延伸扫描
     int next_row = current_row + dir_row;
     int next_col = current_col + dir_col;
-    while (next_row >= 0 && next_row < BOARD_SIZE && next_col >= 0 &&
-           next_col < BOARD_SIZE &&
+    while (next_row >= 0 && next_row < g_boardSize && next_col >= 0 &&
+           next_col < g_boardSize &&
            board->board[next_row][next_col] == current_piece) {
       consecutive_count++;
       next_row += dir_row;
@@ -56,8 +69,8 @@ Piece CheckWin(const ChessBoard* board, int current_row, int current_col) {
     // 反向延伸扫描
     next_row = current_row - dir_row;
     next_col = current_col - dir_col;
-    while (next_row >= 0 && next_row < BOARD_SIZE && next_col >= 0 &&
-           next_col < BOARD_SIZE &&
+    while (next_row >= 0 && next_row < g_boardSize && next_col >= 0 &&
+           next_col < g_boardSize &&
            board->board[next_row][next_col] == current_piece) {
       consecutive_count++;
       next_row -= dir_row;
@@ -110,38 +123,38 @@ int GetPatternScore(int piece_count, int has_skip, int left_open,
   return 0;
 }
 
-int IsStartOfSegment(const ChessBoard* board, int row, int col, int dr, int dc,
-                     Piece piece) {
+Bool IsStartOfSegment(const ChessBoard* board, int row, int col, int dr, int dc,
+                      Piece piece) {
   // 沿着反方向向前探测一格
   int prev_row = row - dr;
   int prev_col = col - dc;
 
   // 如果前一个位置是己方棋子，那当前点位一定不是起点
-  if (prev_row >= 0 && prev_row < BOARD_SIZE && prev_col >= 0 &&
-      prev_col < BOARD_SIZE) {
+  if (prev_row >= 0 && prev_row < g_boardSize && prev_col >= 0 &&
+      prev_col < g_boardSize) {
     if (board->board[prev_row][prev_col] == piece) {
-      return 0;  // 不是起点
+      return FALSE;  // 不是起点
     }
   }
 
   // 如果前一个位置是空格，需要看空格前面是否还有棋子
-  if (prev_row >= 0 && prev_row < BOARD_SIZE && prev_col >= 0 &&
-      prev_col < BOARD_SIZE) {
+  if (prev_row >= 0 && prev_row < g_boardSize && prev_col >= 0 &&
+      prev_col < g_boardSize) {
     if (board->board[prev_row][prev_col] == EMPTY) {
       // 再往前看一步
       int prev2_row = prev_row - dr;
       int prev2_col = prev_col - dc;
-      if (prev2_row >= 0 && prev2_row < BOARD_SIZE && prev2_col >= 0 &&
-          prev2_col < BOARD_SIZE) {
+      if (prev2_row >= 0 && prev2_row < g_boardSize && prev2_col >= 0 &&
+          prev2_col < g_boardSize) {
         if (board->board[prev2_row][prev2_col] == piece) {
-          return 0;  // 不是跳空棋型的起点
+          return FALSE;  // 不是跳空棋型的起点
         }
       }
     }
   }
 
   // 前一个位置是空位、敌方或边界，那当前点就是标准的起点
-  return 1;
+  return TRUE;
 }
 
 int ScanSegment(const ChessBoard* board, int start_row, int start_col, int dr,
@@ -159,7 +172,7 @@ int ScanSegment(const ChessBoard* board, int start_row, int start_col, int dr,
     int nr = start_row + dr * step;  // 下一个扫描位置的行
     int nc = start_col + dc * step;  // 下一个扫描位置的列
     // 出界：端点被边界阻挡，right_open = 0，停止
-    if (nr < 0 || nr >= BOARD_SIZE || nc < 0 || nc >= BOARD_SIZE) {
+    if (nr < 0 || nr >= g_boardSize || nc < 0 || nc >= g_boardSize) {
       right_open = 0;
       break;
     }
@@ -191,7 +204,7 @@ int ScanSegment(const ChessBoard* board, int start_row, int start_col, int dr,
   while (1) {
     int nr = start_row - dr * step;
     int nc = start_col - dc * step;
-    if (nr < 0 || nr >= BOARD_SIZE || nc < 0 || nc >= BOARD_SIZE) {
+    if (nr < 0 || nr >= g_boardSize || nc < 0 || nc >= g_boardSize) {
       left_open = 0;  // 边界阻挡
       break;
     }
@@ -224,8 +237,8 @@ int Evaluate(const ChessBoard* board, Piece view_player) {
   for (int d = 0; d < 4; d++) {
     int dr = directions[d][0];
     int dc = directions[d][1];
-    for (int row = 0; row < BOARD_SIZE; row++) {
-      for (int col = 0; col < BOARD_SIZE; col++) {
+    for (int row = 0; row < g_boardSize; row++) {
+      for (int col = 0; col < g_boardSize; col++) {
         Piece piece = board->board[row][col];
         if (piece == EMPTY) continue;
 
@@ -243,91 +256,295 @@ int Evaluate(const ChessBoard* board, Piece view_player) {
   return (view_player == PLAYER_1) ? p1_score - p2_score : p2_score - p1_score;
 }
 
+int QuickScore(const ChessBoard* board, int row, int col, Piece player) {
+  int total = 0;
+  for (int d = 0; d < 4; d++) {
+    int dr = directions[d][0];
+    int dc = directions[d][1];
+    total += ScanSegment(board, row, col, dr, dc, player);
+  }
+  return total;
+}
+
+int GenerateMoves(const ChessBoard* board, int* rows, int* cols) {
+  int count = 0;
+  for (int r = 0; r < g_boardSize; r++) {
+    for (int c = 0; c < g_boardSize; c++) {
+      if (board->board[r][c] != EMPTY) continue;
+      Bool has_neighbor = FALSE;
+      for (int dr = -1; dr <= 1 && !has_neighbor; dr++) {
+        for (int dc = -1; dc <= 1 && !has_neighbor; dc++) {
+          if (dr == 0 && dc == 0) continue;
+          int nr = r + dr, nc = c + dc;
+          if (nr >= 0 && nr < g_boardSize && nc >= 0 && nc < g_boardSize)
+            if (board->board[nr][nc] != EMPTY) has_neighbor = TRUE;
+        }
+      }
+      if (has_neighbor) {
+        rows[count] = r;
+        cols[count] = c;
+        count++;
+      }
+    }
+  }
+  return count;
+}
+
+void SortMoves(ChessBoard* board, int* rows, int* cols, int count,
+               Piece player) {
+  for (int i = 0; i < count; i++) {
+    int best_idx = i;
+    board->board[rows[i]][cols[i]] = player;
+    int best_val = QuickScore(board, rows[i], cols[i], player);
+    board->board[rows[i]][cols[i]] = EMPTY;
+
+    for (int j = i + 1; j < count; j++) {
+      board->board[rows[j]][cols[j]] = player;
+      int val = QuickScore(board, rows[j], cols[j], player);
+      board->board[rows[j]][cols[j]] = EMPTY;
+      if (val > best_val) {
+        best_val = val;
+        best_idx = j;
+      }
+    }
+    if (best_idx != i) {
+      int tr = rows[i], tc = cols[i];
+      rows[i] = rows[best_idx];
+      cols[i] = cols[best_idx];
+      rows[best_idx] = tr;
+      cols[best_idx] = tc;
+    }
+  }
+}
+
 int AlphaBeta(ChessBoard* board, int depth, int alpha, int beta,
               Piece current_player, Piece maximizing_player) {
+  // 终局截断
+  int cur_eval = Evaluate(board, maximizing_player);
+  if (cur_eval >= SCORE_WIN) return SCORE_WIN;
+  if (cur_eval <= -SCORE_WIN) return -SCORE_WIN;
+
   if (depth == 0 || IsBoardFull(board)) {
-    return Evaluate(board, maximizing_player);
+    return cur_eval;
   }
+
+  // 深度1直接评估所有走法，不再递归
+  if (depth == 1) {
+    int best = (current_player == maximizing_player) ? INT_MIN : INT_MAX;
+    int moves_rows[225], moves_cols[225];
+    int n = GenerateMoves(board, moves_rows, moves_cols);
+    for (int i = 0; i < n; i++) {
+      int r = moves_rows[i], c = moves_cols[i];
+      board->board[r][c] = current_player;
+      board->emptyCeils--;
+      if (CheckWin(board, r, c) == current_player) {
+        board->board[r][c] = EMPTY;
+        board->emptyCeils++;
+        return (current_player == maximizing_player) ? SCORE_WIN : -SCORE_WIN;
+      }
+      int val = Evaluate(board, maximizing_player);
+      board->board[r][c] = EMPTY;
+      board->emptyCeils++;
+      if (current_player == maximizing_player) {
+        if (val > best) best = val;
+      } else {
+        if (val < best) best = val;
+      }
+    }
+    return best;
+  }
+
+  // 深度 > 1：生成候选走法并排序
+  int moves_rows[225], moves_cols[225];
+  int move_count = GenerateMoves(board, moves_rows, moves_cols);
+  if (move_count == 0) return cur_eval;
+
+  SortMoves(board, moves_rows, moves_cols, move_count, current_player);
 
   Piece opponent = (current_player == PLAYER_1) ? PLAYER_2 : PLAYER_1;
 
-  // 极大层：当前走棋方 == 最大化方
   if (current_player == maximizing_player) {
     int max_score = INT_MIN;
-    for (int row = 0; row < BOARD_SIZE; row++) {
-      for (int col = 0; col < BOARD_SIZE; col++) {
-        if (board->board[row][col] == EMPTY) {
-          board->board[row][col] = current_player;
-          board->emptyCeils--;
-
-          int score = AlphaBeta(board, depth - 1, alpha, beta, opponent,
-                                maximizing_player);
-          max_score = MaxInt(max_score, score);
-          alpha = MaxInt(alpha, score);
-
-          board->board[row][col] = EMPTY;
-          board->emptyCeils++;
-
-          if (alpha >= beta) goto prune_max;
-        }
+    for (int i = 0; i < move_count; i++) {
+      int r = moves_rows[i], c = moves_cols[i];
+      board->board[r][c] = current_player;
+      board->emptyCeils--;
+      if (CheckWin(board, r, c) == current_player) {
+        board->board[r][c] = EMPTY;
+        board->emptyCeils++;
+        return SCORE_WIN;
       }
+      int score =
+          AlphaBeta(board, depth - 1, alpha, beta, opponent, maximizing_player);
+      max_score = MaxInt(max_score, score);
+      alpha = MaxInt(alpha, score);
+      board->board[r][c] = EMPTY;
+      board->emptyCeils++;
+      if (alpha >= beta) break;
     }
-  prune_max:
     return max_score;
-  }
-  // 极小层：当前走棋方是对手
-  else {
+  } else {
     int min_score = INT_MAX;
-    for (int row = 0; row < BOARD_SIZE; row++) {
-      for (int col = 0; col < BOARD_SIZE; col++) {
-        if (board->board[row][col] == EMPTY) {
-          board->board[row][col] = current_player;
-          board->emptyCeils--;
-
-          int score = AlphaBeta(board, depth - 1, alpha, beta, opponent,
-                                maximizing_player);
-          min_score = MinInt(min_score, score);
-          beta = MinInt(beta, score);
-
-          board->board[row][col] = EMPTY;
-          board->emptyCeils++;
-
-          if (beta <= alpha) goto prune_min;
-        }
+    for (int i = 0; i < move_count; i++) {
+      int r = moves_rows[i], c = moves_cols[i];
+      board->board[r][c] = current_player;
+      board->emptyCeils--;
+      if (CheckWin(board, r, c) == current_player) {
+        board->board[r][c] = EMPTY;
+        board->emptyCeils++;
+        return -SCORE_WIN;
       }
+      int score =
+          AlphaBeta(board, depth - 1, alpha, beta, opponent, maximizing_player);
+      min_score = MinInt(min_score, score);
+      beta = MinInt(beta, score);
+      board->board[r][c] = EMPTY;
+      board->emptyCeils++;
+      if (beta <= alpha) break;
     }
-  prune_min:
     return min_score;
   }
 }
 
 void GetBestMove(ChessBoard* board, Piece player, int* best_row,
                  int* best_col) {
-  int best_score = INT_MIN;
-  *best_row = BOARD_SIZE / 2;
-  *best_col = BOARD_SIZE / 2;
-
   Piece opponent = (player == PLAYER_1) ? PLAYER_2 : PLAYER_1;
 
-  for (int row = 0; row < BOARD_SIZE; row++) {
-    for (int col = 0; col < BOARD_SIZE; col++) {
-      if (board->board[row][col] == EMPTY) {
-        // 模拟当前玩家落子
-        board->board[row][col] = player;
-        board->emptyCeils--;
-
-        // 下一步轮到对手，最大化方仍是 player
-        int score = AlphaBeta(board, 3, INT_MIN, INT_MAX, opponent, player);
-
+  // 第一优先级：自己一步必胜
+  for (int row = 0; row < g_boardSize; row++) {
+    for (int col = 0; col < g_boardSize; col++) {
+      if (board->board[row][col] != EMPTY) continue;
+      board->board[row][col] = player;
+      if (CheckWin(board, row, col) == player) {
         board->board[row][col] = EMPTY;
-        board->emptyCeils++;
+        *best_row = row;
+        *best_col = col;
+        return;
+      }
+      board->board[row][col] = EMPTY;
+    }
+  }
 
-        if (score > best_score) {
-          best_score = score;
-          *best_row = row;
-          *best_col = col;
+  // 第二优先级：堵对手一步必胜
+  for (int row = 0; row < g_boardSize; row++) {
+    for (int col = 0; col < g_boardSize; col++) {
+      if (board->board[row][col] != EMPTY) continue;
+      board->board[row][col] = opponent;
+      if (CheckWin(board, row, col) == opponent) {
+        board->board[row][col] = EMPTY;
+        *best_row = row;
+        *best_col = col;
+        return;
+      }
+      board->board[row][col] = EMPTY;
+    }
+  }
+
+  //  第三优先级：正常搜索
+  int best_score = INT_MIN;
+  *best_row = g_boardSize / 2;
+  *best_col = g_boardSize / 2;
+
+  Move move_list[225];
+  int move_count = 0;
+
+  // 收集有邻居的空位
+  for (int row = 0; row < g_boardSize; row++) {
+    for (int col = 0; col < g_boardSize; col++) {
+      if (board->board[row][col] != EMPTY) continue;
+
+      Bool has_neighbor = FALSE;
+      for (int dr = -1; dr <= 1 && !has_neighbor; dr++) {
+        for (int dc = -1; dc <= 1 && !has_neighbor; dc++) {
+          if (dr == 0 && dc == 0) continue;
+          int r = row + dr, c = col + dc;
+          if (r >= 0 && r < g_boardSize && c >= 0 && c < g_boardSize)
+            if (board->board[r][c] != EMPTY) has_neighbor = TRUE;
         }
+      }
+      if (!has_neighbor) continue;
+
+      board->board[row][col] = player;
+      int score = Evaluate(board, player);
+      board->board[row][col] = EMPTY;
+
+      move_list[move_count].row = row;
+      move_list[move_count].col = col;
+      move_list[move_count].score = score;
+      move_count++;
+    }
+  }
+
+  // 按预评分降序排序
+  for (int i = 0; i < move_count; i++) {
+    for (int j = i + 1; j < move_count; j++) {
+      if (move_list[j].score > move_list[i].score) {
+        Move temp = move_list[i];
+        move_list[i] = move_list[j];
+        move_list[j] = temp;
       }
     }
   }
+
+  // Alpha-Beta 搜索
+  int max_search = move_count < 30 ? move_count : 30;
+  for (int i = 0; i < max_search; i++) {
+    int row = move_list[i].row;
+    int col = move_list[i].col;
+
+    board->board[row][col] = player;
+    board->emptyCeils--;
+
+    if (CheckWin(board, row, col) == player) {
+      board->board[row][col] = EMPTY;
+      board->emptyCeils++;
+      *best_row = row;
+      *best_col = col;
+      return;
+    }
+
+    int score = AlphaBeta(board, 3, INT_MIN, INT_MAX, opponent, player);
+    board->board[row][col] = EMPTY;
+    board->emptyCeils++;
+
+    if (score > best_score) {
+      best_score = score;
+      *best_row = row;
+      *best_col = col;
+    }
+  }
+}
+
+void InitPositionStack(PositionStack* head) {
+  head->end = -1;
+  head->position =
+      (Position*)malloc(sizeof(Position) * g_boardSize * g_boardSize);
+}
+
+void InPositionStack(int row, int col, PositionStack* head) {
+  head->end++;
+  head->position[head->end].col = col;
+  head->position[head->end].row = row;
+}
+
+void OutPositionStack(PositionStack* head) {
+  if (head->end > -1) {
+    int row = head->position[head->end].row;
+    int col = head->position[head->end].col;
+    head->end--;
+    g_currentPlayer = g_chessBoard.board[row][col];
+    g_chessBoard.board[row][col] = EMPTY;
+  }
+}
+
+void DestroyPositionStack(PositionStack* head) {
+  free(head->position);
+  head->end = -1;
+}
+
+void InitAll(PositionStack* head) {
+  InitBoard(&g_chessBoard);
+  InitWindowSize(&g_window_size);
+  InitGameResources(&g_gameResources, &g_window_size);
+  InitPositionStack(head);
 }
