@@ -184,8 +184,8 @@ void InitAllGameButtons(const struct window_size* winSize) {
 
   btnRegame = CreateButton(
       gameBtnX, regameBtnY, GAME_BTN_WIDTH, GAME_BTN_HEIGHT, "再来一局", 20,
-      OnRegame, (Color){33, 150, 243, 255}, (Color){25, 118, 210, 255},
-      (Color){13, 71, 161, 255}, WHITE);
+      OnRegame, (Color){255, 208, 81, 255}, (Color){191, 156, 61, 255},
+      (Color){117, 95, 37, 255}, WHITE);
 
   // 组装数组
   menuButtons[0] = &btnStart_AI;
