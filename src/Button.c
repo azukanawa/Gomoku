@@ -257,7 +257,13 @@ void OnRegame(void) {
   TraceLog(LOG_INFO, "点击了【再来一局】按钮");
   switch (g_whowin) {
     case NOTEND:
-      TraceLog(LOG_INFO, "点击了再来一局按钮,但是没有分出胜负,继续游戏");
+      TraceLog(LOG_INFO, "没有分出胜负");
+      g_whowin = NOTEND;
+      FreeBoard(&g_chessBoard);
+      InitBoard(&g_chessBoard);
+      DestroyPositionStack(&g_positionStack);
+      InitPositionStack(&g_positionStack);
+      g_currentPlayer = PLAYER_1;
       break;
     case PLAYER_1_WIN:
       TraceLog(LOG_INFO, "黑棋获胜，重新开始游戏");
