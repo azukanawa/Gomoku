@@ -75,6 +75,7 @@ void UnloadGameResources(GameResources* res);  // 卸载所有资源
 
 void RenderingBackground(void);      // 从全局变量中获取当前页面信息，绘制背景
 void DrawMessage(char* resultText);  // 绘制提示框，显示结果文本
+void RenderingScore(void);           // 绘制当前比分（黑棋和白棋的得分）
 
 // 全局变量声明（使用extern）
 extern Color color_white;
