@@ -11,6 +11,7 @@
 void OnStartGame(void);
 void OnRestartGame(void);
 void OnExitGame(void);
+void OnRegame(void);
 void OnUndoMove(void);
 void OnStartGame_AI(void);
 
@@ -121,14 +122,15 @@ void DrawAllButtons(
 static Button btnStart;
 static Button btnStart_AI;
 static Button btnRestart;
+static Button btnRegame;
 static Button btnExit;
 static Button btnUndo;
 
 // 指向按钮的指针数组们和按钮数量
 static Button* menuButtons[3];
 static int menuButtonCount = 3;
-static Button* gameButtons[2];
-static int gameButtonCount = 2;
+static Button* gameButtons[3];
+static int gameButtonCount = 3;
 
 int ButtonPage = 0;  // 0表示主菜单，1表示游戏内
 
@@ -151,8 +153,8 @@ void InitAllGameButtons(const struct window_size* winSize) {
 
   btnStart_AI =
       CreateButton(menuBtnX, startBtn_AI_Y, MENU_BTN_WIDTH, MENU_BTN_HEIGHT,
-                   "人机对战", 24, OnStartGame_AI, (Color){76, 175, 80, 255},
-                   (Color){56, 142, 60, 255}, (Color){27, 94, 32, 255}, WHITE);
+                   "人机对战", 24, OnStartGame_AI, (Color){19, 25, 184, 255},
+                   (Color){15, 20, 145, 255}, (Color){10, 13, 92, 255}, WHITE);
 
   btnStart =
       CreateButton(menuBtnX, startBtnY, MENU_BTN_WIDTH, MENU_BTN_HEIGHT,
@@ -169,7 +171,7 @@ void InitAllGameButtons(const struct window_size* winSize) {
   const float gameBtnX = winSize->width - rightMargin - GAME_BTN_WIDTH;
   const float restartBtnY = winSize->height * (100.0f / BASE_HEIGHT);
   const float undoBtnY = winSize->height * (160.0f / BASE_HEIGHT);
-
+  const float regameBtnY = winSize->height * (220.0f / BASE_HEIGHT);
   btnRestart = CreateButton(
       gameBtnX, restartBtnY, GAME_BTN_WIDTH, GAME_BTN_HEIGHT, "放弃游戏", 20,
       OnRestartGame, (Color){33, 150, 243, 255}, (Color){25, 118, 210, 255},
@@ -180,12 +182,18 @@ void InitAllGameButtons(const struct window_size* winSize) {
                    20, OnUndoMove, (Color){255, 152, 0, 255},
                    (Color){245, 124, 0, 255}, (Color){230, 81, 0, 255}, WHITE);
 
+  btnRegame = CreateButton(
+      gameBtnX, regameBtnY, GAME_BTN_WIDTH, GAME_BTN_HEIGHT, "再来一局", 20,
+      OnRegame, (Color){255, 208, 81, 255}, (Color){191, 156, 61, 255},
+      (Color){117, 95, 37, 255}, WHITE);
+
   // 组装数组
   menuButtons[0] = &btnStart_AI;
   menuButtons[1] = &btnStart;
   menuButtons[2] = &btnExit;
   gameButtons[0] = &btnRestart;
   gameButtons[1] = &btnUndo;
+  gameButtons[2] = &btnRegame;
 }
 Button** GetPageButtons(
     int ButtonPage, int* outCount) {  // 根据当前页面返回对应的按钮数组和数量
@@ -225,7 +233,10 @@ void OnRestartGame(void) {
   StopMusicStream(*g_gameResources.currentBGM);           // 停止当前BGM
   PlayMusicStream(g_gameResources.MenuBGM);               // 播放菜单BGM
   g_gameResources.currentBGM = &g_gameResources.MenuBGM;  // 切换到菜单BGM
-  TraceLog(LOG_INFO, "点击了【重新开始】按钮");
+  g_whowin = NOTEND;
+  g_blackScore = 0;
+  g_whiteScore = 0;
+  TraceLog(LOG_INFO, "点击了【放弃游戏】按钮");
 }
 
 void OnExitGame(void) {
@@ -240,4 +251,52 @@ void OnUndoMove(void) {
   }
 
   TraceLog(LOG_INFO, "点击了【悔棋】按钮");
+}
+
+void OnRegame(void) {
+  TraceLog(LOG_INFO, "点击了【再来一局】按钮");
+  switch (g_whowin) {
+    case NOTEND:
+      TraceLog(LOG_INFO, "没有分出胜负");
+      g_whowin = NOTEND;
+      FreeBoard(&g_chessBoard);
+      InitBoard(&g_chessBoard);
+      DestroyPositionStack(&g_positionStack);
+      InitPositionStack(&g_positionStack);
+      g_currentPlayer = PLAYER_1;
+      break;
+    case PLAYER_1_WIN:
+      TraceLog(LOG_INFO, "黑棋获胜，重新开始游戏");
+      g_blackScore++;
+      g_whowin = NOTEND;
+      FreeBoard(&g_chessBoard);
+      InitBoard(&g_chessBoard);
+      DestroyPositionStack(&g_positionStack);
+      InitPositionStack(&g_positionStack);
+      g_currentPlayer = PLAYER_1;
+      break;
+    case PLAYER_2_WIN:
+      TraceLog(LOG_INFO, "白棋获胜，重新开始游戏");
+      g_whiteScore++;
+      g_whowin = NOTEND;
+      FreeBoard(&g_chessBoard);
+      InitBoard(&g_chessBoard);
+      DestroyPositionStack(&g_positionStack);
+      InitPositionStack(&g_positionStack);
+      g_currentPlayer = PLAYER_1;
+      break;
+    case DRAW:
+      TraceLog(LOG_INFO, "平局，重新开始游戏");
+      g_blackScore++;
+      g_whiteScore++;
+      g_whowin = NOTEND;
+      FreeBoard(&g_chessBoard);
+      InitBoard(&g_chessBoard);
+      DestroyPositionStack(&g_positionStack);
+      InitPositionStack(&g_positionStack);
+      g_currentPlayer = PLAYER_1;
+      break;
+    default:
+      break;
+  }
 }

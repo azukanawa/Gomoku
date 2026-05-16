@@ -43,5 +43,6 @@ extern ChessBoard g_chessBoard;
 extern Piece g_currentPlayer;  // 当前执子玩家
 extern int g_boardSize;
 extern PositionStack g_positionStack;
-
+extern int g_blackScore, g_whiteScore;
+extern GameResult g_whowin;
 #endif
