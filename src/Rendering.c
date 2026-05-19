@@ -37,10 +37,11 @@ int InitGameResources(GameResources* res, WindowSize* winSize) {
   // 开始初始化所有资源
 
   // 1. 初始化字体
-  InitChineseFont("../res/Font/微软雅黑.ttf", 20,
-                  "开始游戏重新退出悔棋放弃人机对战双人对战游戏结束，黑棋获胜！"
-                  "游戏结束，白棋获胜！游戏结束，平局！",
-                  &res->chineseFont);
+  InitChineseFont(
+      "../res/Font/微软雅黑.ttf", 20,
+      "开始游戏重新退出悔棋放弃人机对战双人对战游戏结束，黑棋获胜！"
+      "游戏结束，白棋获胜！游戏结束，平局！再来一局1234567890当前比分:：",
+      &res->chineseFont);
   // 1. 初始化字体结束
 
   // 2. 初始化纹理
@@ -152,6 +153,57 @@ void DrawMessage(char* resultText) {
   // 绘制居中文字
   DrawTextEx(g_gameResources.chineseFont, resultText, (Vector2){textX, textY},
              fontSize, 1.0f, textColor);
+}
+
+void RenderingScore(void) {
+  // 基于基准分辨率的比例计算（和你的按钮定位逻辑完全相同）
+  const float screenWidth = GetScreenWidth();
+  const float screenHeight = GetScreenHeight();
+  const float scaleX = screenWidth / 800.0f;
+  const float scaleY = screenHeight / 600.0f;
+
+  // 比分面板尺寸和位置（顶部水平居中）
+  const float panelWidth = 280.0f * scaleX;
+  const float panelHeight = 70.0f * scaleY;
+  const float panelX = screenWidth / 2.0f - panelWidth / 2.0f;
+  const float panelY = 15.0f * scaleY;  // 距离顶部15像素（基准分辨率下）
+
+  // 绘制背景矩形（无圆角，和按钮背景风格一致）
+  DrawRectangle(panelX, panelY, panelWidth, panelHeight,
+                Fade(LIGHTGRAY, 0.85f));
+  DrawRectangleLines(panelX, panelY, panelWidth, panelHeight, DARKGRAY);
+
+  // 绘制标题"当前比分"
+  const char* titleText = "当前比分";
+  const int titleFontSize = 24;
+  const int titleSpacing = 2;
+  Vector2 titleSize = MeasureTextEx(g_gameResources.chineseFont, titleText,
+                                    titleFontSize, titleSpacing);
+  Vector2 titlePos = {panelX + (panelWidth - titleSize.x) / 2.0f,
+                      panelY + 8.0f * scaleY};
+  DrawTextEx(g_gameResources.chineseFont, titleText, titlePos, titleFontSize,
+             titleSpacing, BLACK);
+
+  // 绘制黑棋得分
+  char blackScoreText[32];
+  sprintf(blackScoreText, "黑棋：%d 局", g_blackScore);
+  const int scoreFontSize = 20;
+  const int scoreSpacing = 2;
+  Vector2 blackSize = MeasureTextEx(g_gameResources.chineseFont, blackScoreText,
+                                    scoreFontSize, scoreSpacing);
+  Vector2 blackPos = {panelX + 35.0f * scaleX, panelY + 38.0f * scaleY};
+  DrawTextEx(g_gameResources.chineseFont, blackScoreText, blackPos,
+             scoreFontSize, scoreSpacing, BLACK);
+
+  // 绘制白棋得分
+  char whiteScoreText[32];
+  sprintf(whiteScoreText, "白棋：%d 局", g_whiteScore);
+  Vector2 whiteSize = MeasureTextEx(g_gameResources.chineseFont, whiteScoreText,
+                                    scoreFontSize, scoreSpacing);
+  Vector2 whitePos = {panelX + panelWidth - 35.0f * scaleX - whiteSize.x,
+                      panelY + 38.0f * scaleY};
+  DrawTextEx(g_gameResources.chineseFont, whiteScoreText, whitePos,
+             scoreFontSize, scoreSpacing, BLACK);
 }
 
 // 全局变量定义（只在这里定义一次）
