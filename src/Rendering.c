@@ -30,7 +30,7 @@ Texture2D ChessBoard_13 = {0};  // 初始化为空
 int InitGameResources(GameResources* res, WindowSize* winSize) {
   // 先初始化窗口
   SetTargetFPS(60);
-  SetConfigFlags(FLAG_WINDOW_HIGHDPI);
+  // SetConfigFlags(FLAG_WINDOW_HIGHDPI);
   InitWindow(winSize->width, winSize->height, "五子棋游戏test");
   SetWindowState(FLAG_WINDOW_RESIZABLE);  // 设置窗口可变分辨率
   SetWindowMinSize(800, 600);
