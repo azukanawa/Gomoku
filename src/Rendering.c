@@ -30,6 +30,7 @@ Texture2D ChessBoard_13 = {0};  // 初始化为空
 int InitGameResources(GameResources* res, WindowSize* winSize) {
   // 先初始化窗口
   SetTargetFPS(60);
+  SetConfigFlags(FLAG_WINDOW_HIGHDPI);
   InitWindow(winSize->width, winSize->height, "五子棋游戏test");
   SetWindowState(FLAG_WINDOW_RESIZABLE);  // 设置窗口可变分辨率
   SetWindowMinSize(800, 600);
@@ -38,27 +39,27 @@ int InitGameResources(GameResources* res, WindowSize* winSize) {
 
   // 1. 初始化字体
   InitChineseFont(
-      "../res/Font/微软雅黑.ttf", 20,
+      "./res/Font/微软雅黑.ttf", 20,
       "开始游戏重新退出悔棋放弃人机对战双人对战游戏结束，黑棋获胜！"
       "游戏结束，白棋获胜！游戏结束，平局！再来一局1234567890当前比分:：",
       &res->chineseFont);
   // 1. 初始化字体结束
 
   // 2. 初始化纹理
-  res->wood1 = LoadTexture("../res/Picture/wood1.jpg");
-  res->title = LoadTexture("../res/Picture/title.png");
-  res->Background = LoadTexture("../res/Picture/background.jpeg");
-  res->Table = LoadTexture("../res/Picture/table.jpg");
+  res->wood1 = LoadTexture("./res/Picture/wood1.png");
+  res->title = LoadTexture("./res/Picture/title.png");
+  res->Background = LoadTexture("./res/Picture/background.png");
+  res->Table = LoadTexture("./res/Picture/table.png");
   // 2. 初始化纹理结束
 
   // 3. 初始化音频设备
   InitAudioDevice();
-  res->DownSound = LoadSound("../res/Sound/落子.mp3");
+  res->DownSound = LoadSound("./res/Sound/落子.mp3");
   SetSoundVolume(res->DownSound, 1.0f);  // 设置落子音效音量为200%
-  res->MenuBGM = LoadMusicStream("../res/Music/周志华-紫禁城冬雪.mp3");
+  res->MenuBGM = LoadMusicStream("./res/Music/周志华-紫禁城冬雪.mp3");
   res->MenuBGM.looping = true;
   SetMusicVolume(res->MenuBGM, 0.25f);  // 设置BGM音量为25%
-  res->GameBGM = LoadMusicStream("../res/Music/InGame.mp3");
+  res->GameBGM = LoadMusicStream("./res/Music/InGame.mp3");
   res->GameBGM.looping = true;
   SetMusicVolume(res->GameBGM, 0.25f);  // 设置BGM音量为25%
   res->currentBGM = &res->MenuBGM;      // 默认当前BGM为菜单音乐
