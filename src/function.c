@@ -29,6 +29,9 @@ void InitBoard(ChessBoard* board) {
 }
 
 void FreeBoard(ChessBoard* board) {
+  if (board == NULL) {
+    return;
+  }
   for (int i = 0; i < g_boardSize; i++) {
     free(board->board[i]);
   }
@@ -538,6 +541,10 @@ void OutPositionStack(PositionStack* head) {
 }
 
 void DestroyPositionStack(PositionStack* head) {
+  if (head->position == NULL) {
+    head->end = -1;
+    return;
+  }
   free(head->position);
   head->end = -1;
 }

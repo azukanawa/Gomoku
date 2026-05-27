@@ -1,9 +1,5 @@
 #include "game.h"
 
-#include <stdio.h>
-
-#include "Button.h"
-#include "Rendering.h"
 #include "chessBoard.h"
 #include "function.h"
 GameResult LocalTwoPlayerMode(void) {
@@ -40,7 +36,6 @@ GameResult AiMode(void) {
     GetBestMove(&g_chessBoard, g_currentPlayer, &row, &col);
     g_chessBoard.board[row][col] = g_currentPlayer;
     InPositionStack(row, col, &g_positionStack);
-    g_chessBoard.emptyCeils;
     g_currentPlayer = (g_currentPlayer == PLAYER_1) ? PLAYER_2 : PLAYER_1;
   }
   who_wins = CheckWin(&g_chessBoard, row, col);
