@@ -4,8 +4,17 @@ project(gomoku C)
 set(CMAKE_C_STANDARD 99)
 
 file(GLOB_RECURSE SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.c)
-add_executable(gomoku ${SRC_FILES})
-
+if(WIN32)
+    add_executable(gomoku WIN32 ${SRC_FILES})
+    # MSVC 默认查找 WinMain，需要手动指定入口为 mainCRTStartup
+    if(MSVC)
+        set_target_properties(gomoku PROPERTIES
+            LINK_FLAGS "/ENTRY:mainCRTStartup"
+        )
+    endif()
+else()
+    add_executable(gomoku ${SRC_FILES})
+endif()
 target_include_directories(gomoku PRIVATE
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/raylib/include
