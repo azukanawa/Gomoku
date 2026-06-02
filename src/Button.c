@@ -91,7 +91,6 @@ void DrawButton(Button* button, Font g_chineseFont)  // 绘制单个Button
   );
   float textX = button->bounds.x + (button->bounds.width - textSize.x) / 2.0f;
   float textY = button->bounds.y + (button->bounds.height - textSize.y) / 2.0f;
-  button->bounds.y + (button->bounds.height - button->fontSize) / 2;
   DrawTextEx(
       g_chineseFont,  // 字体对象
       button->text,   // 文字内容
@@ -245,11 +244,15 @@ void OnExitGame(void) {
 }
 
 void OnUndoMove(void) {
+  if (g_whowin != NOTEND) {
+    goto log;
+  }
   OutPositionStack(&g_positionStack);
   if (ButtonPage == 2) {
     OutPositionStack(&g_positionStack);
   }
 
+log:
   TraceLog(LOG_INFO, "点击了【悔棋】按钮");
 }
 
