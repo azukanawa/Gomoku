@@ -3,9 +3,9 @@
 #include "chessBoard.h"
 #include "function.h"
 GameResult LocalTwoPlayerMode(void) {
-  int row;
-  int col;
-  Piece who_wins;
+  int row = 0;
+  int col = 0;
+  Piece who_wins = {0};
   if (HandleChessPlacement(&row, &col) == FALSE) {
     return NOTEND;
   }
@@ -24,9 +24,9 @@ GameResult LocalTwoPlayerMode(void) {
 }
 
 GameResult AiMode(void) {
-  int row;
-  int col;
-  Piece who_wins;
+  int row = 0;
+  int col = 0;
+  Piece who_wins = {0};
   if (g_currentPlayer == PLAYER_1) {
     if (HandleChessPlacement(&row, &col) == FALSE) {
       return NOTEND;

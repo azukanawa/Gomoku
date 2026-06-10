@@ -12,7 +12,7 @@ target_include_directories(gomoku PRIVATE
 )
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    target_compile_options(gomoku PRIVATE -O2 -march=native -flto)
+    target_compile_options(gomoku PRIVATE -O3 -flto)
     target_link_options(gomoku PRIVATE -flto)
     add_custom_command(TARGET gomoku POST_BUILD
         COMMAND strip "$<TARGET_FILE:gomoku>"

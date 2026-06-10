@@ -149,7 +149,7 @@ Bool GetMouseChessPosition(int boardSize, const struct window_size* winSize,
  * @return 落子成功返回TRUE，否则返回FALSE
  */
 Bool HandleChessPlacement(int* row_out, int* col_out) {
-  int row, col;
+  int row = 0, col = 0;
   if (!GetMouseChessPosition(g_boardSize, &g_window_size, &row, &col)) {
     return FALSE;
   }
@@ -186,7 +186,7 @@ Bool HandleChessPlacement(int* row_out, int* col_out) {
  * @param winSize 窗口大小
  */
 void DrawChessPreview(int boardSize, const struct window_size* winSize) {
-  int row, col;
+  int row = 0, col = 0;
   if (!GetMouseChessPosition(boardSize, winSize, &row, &col)) {
     return;
   }

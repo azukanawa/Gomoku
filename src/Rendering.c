@@ -186,7 +186,7 @@ void RenderingScore(void) {
              titleSpacing, BLACK);
 
   // 绘制黑棋得分
-  char blackScoreText[32];
+  char blackScoreText[32] = {0};
   sprintf(blackScoreText, "黑棋：%d 局", g_blackScore);
   const int scoreFontSize = 20;
   const int scoreSpacing = 2;
@@ -197,7 +197,7 @@ void RenderingScore(void) {
              scoreFontSize, scoreSpacing, BLACK);
 
   // 绘制白棋得分
-  char whiteScoreText[32];
+  char whiteScoreText[32] = {0};
   sprintf(whiteScoreText, "白棋：%d 局", g_whiteScore);
   Vector2 whiteSize = MeasureTextEx(g_gameResources.chineseFont, whiteScoreText,
                                     scoreFontSize, scoreSpacing);

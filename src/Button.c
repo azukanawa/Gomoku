@@ -65,7 +65,7 @@ void DrawButton(Button* button, Font g_chineseFont)  // 绘制单个Button
 {
   if (button == NULL) return;
 
-  Color currentColor;
+  Color currentColor = {0};
   switch (button->state) {
     case BUTTON_HOVER:
       currentColor = button->colorHover;
@@ -118,17 +118,17 @@ void DrawAllButtons(
 }
 
 // 私有静态按钮结构体
-static Button btnStart;
-static Button btnStart_AI;
-static Button btnRestart;
-static Button btnRegame;
-static Button btnExit;
-static Button btnUndo;
+static Button btnStart = {0};
+static Button btnStart_AI = {0};
+static Button btnRestart = {0};
+static Button btnRegame = {0};
+static Button btnExit = {0};
+static Button btnUndo = {0};
 
 // 指向按钮的指针数组们和按钮数量
-static Button* menuButtons[3];
+static Button* menuButtons[3] = {0};
 static int menuButtonCount = 3;
-static Button* gameButtons[3];
+static Button* gameButtons[3] = {0};
 static int gameButtonCount = 3;
 
 int ButtonPage = 0;  // 0表示主菜单，1表示游戏内
@@ -136,7 +136,6 @@ int ButtonPage = 0;  // 0表示主菜单，1表示游戏内
 #define BASE_WIDTH 800
 #define BASE_HEIGHT 600
 
-// ✅ 和头文件声明完全一模一样
 void InitAllGameButtons(const struct window_size* winSize) {
   // 按钮绝对尺寸（保持不变）
   const float MENU_BTN_WIDTH = 200.0f;
@@ -197,10 +196,7 @@ void InitAllGameButtons(const struct window_size* winSize) {
 Button** GetPageButtons(
     int ButtonPage, int* outCount) {  // 根据当前页面返回对应的按钮数组和数量
   if (ButtonPage == 0) {              // 0是标题页
-    FreeBoard(&g_chessBoard);
-    InitBoard(&g_chessBoard);
-    DestroyPositionStack(&g_positionStack);
-    InitPositionStack(&g_positionStack);
+
     *outCount = menuButtonCount;
     return menuButtons;
   } else if (ButtonPage == 1 || ButtonPage == 2) {
@@ -212,6 +208,10 @@ Button** GetPageButtons(
 }
 
 void OnStartGame_AI(void) {
+  FreeBoard(&g_chessBoard);
+  InitBoard(&g_chessBoard);
+  DestroyPositionStack(&g_positionStack);
+  InitPositionStack(&g_positionStack);
   ButtonPage = 2;                                         // 2代表人机对战
   StopMusicStream(*g_gameResources.currentBGM);           // 停止当前BGM
   PlayMusicStream(g_gameResources.GameBGM);               // 播放游戏内BGM
@@ -220,6 +220,10 @@ void OnStartGame_AI(void) {
 }
 
 void OnStartGame(void) {
+  FreeBoard(&g_chessBoard);
+  InitBoard(&g_chessBoard);
+  DestroyPositionStack(&g_positionStack);
+  InitPositionStack(&g_positionStack);
   ButtonPage = 1;                                         // 1代表双人对战
   StopMusicStream(*g_gameResources.currentBGM);           // 停止当前BGM
   PlayMusicStream(g_gameResources.GameBGM);               // 播放游戏内BGM
@@ -229,6 +233,10 @@ void OnStartGame(void) {
 
 void OnRestartGame(void) {
   ButtonPage = 0;
+  FreeBoard(&g_chessBoard);
+  InitBoard(&g_chessBoard);
+  DestroyPositionStack(&g_positionStack);
+  InitPositionStack(&g_positionStack);
   StopMusicStream(*g_gameResources.currentBGM);           // 停止当前BGM
   PlayMusicStream(g_gameResources.MenuBGM);               // 播放菜单BGM
   g_gameResources.currentBGM = &g_gameResources.MenuBGM;  // 切换到菜单BGM
