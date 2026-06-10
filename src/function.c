@@ -29,13 +29,15 @@ void InitBoard(ChessBoard* board) {
 }
 
 void FreeBoard(ChessBoard* board) {
-  if (board == NULL) {
+  if (board == NULL || board->board == NULL) {
     return;
   }
   for (int i = 0; i < g_boardSize; i++) {
     free(board->board[i]);
+    board->board[i] = NULL;
   }
   free(board->board);
+  board->board = NULL;
 }
 
 Bool IsBoardFull(const ChessBoard* board) {
@@ -50,7 +52,7 @@ Piece CheckWin(const ChessBoard* board, int current_row, int current_col) {
   // 当前落子的玩家棋子类型
   Piece current_piece = board->board[current_row][current_col];
 
-  int direction_index;  // 方向循环索引
+  int direction_index = 0;  // 方向循环索引
 
   // 遍历所有连线方向
   for (direction_index = 0; direction_index < 4; direction_index++) {
@@ -334,7 +336,7 @@ int AlphaBeta(ChessBoard* board, int depth, int alpha, int beta,
   // 深度1直接评估所有走法，不再递归
   if (depth == 1) {
     int best = (current_player == maximizing_player) ? INT_MIN : INT_MAX;
-    int moves_rows[225], moves_cols[225];
+    int moves_rows[225] = {0}, moves_cols[225] = {0};
     int n = GenerateMoves(board, moves_rows, moves_cols);
     for (int i = 0; i < n; i++) {
       int r = moves_rows[i], c = moves_cols[i];
@@ -358,7 +360,7 @@ int AlphaBeta(ChessBoard* board, int depth, int alpha, int beta,
   }
 
   // 深度 > 1：生成候选走法并排序
-  int moves_rows[225], moves_cols[225];
+  int moves_rows[225] = {0}, moves_cols[225] = {0};
   int move_count = GenerateMoves(board, moves_rows, moves_cols);
   if (move_count == 0) return cur_eval;
 
@@ -448,7 +450,7 @@ void GetBestMove(ChessBoard* board, Piece player, int* best_row,
   *best_row = g_boardSize / 2;
   *best_col = g_boardSize / 2;
 
-  Move move_list[225];
+  Move move_list[225] = {0};
   int move_count = 0;
 
   // 收集有邻居的空位
@@ -525,12 +527,19 @@ void InitPositionStack(PositionStack* head) {
 }
 
 void InPositionStack(int row, int col, PositionStack* head) {
+  if (head->position == NULL) {
+    return;
+  }
   head->end++;
   head->position[head->end].col = col;
   head->position[head->end].row = row;
 }
 
 void OutPositionStack(PositionStack* head) {
+  if (head->position == NULL) {
+    return;
+  }
+
   if (head->end > -1) {
     int row = head->position[head->end].row;
     int col = head->position[head->end].col;
@@ -546,6 +555,7 @@ void DestroyPositionStack(PositionStack* head) {
     return;
   }
   free(head->position);
+  head->position = NULL;
   head->end = -1;
 }
 

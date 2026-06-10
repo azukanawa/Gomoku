@@ -9,11 +9,11 @@
 
 // 全局变量定义（只在这里写一次，分配实际内存）
 int g_boardSize = 13;
-ChessBoard g_chessBoard;
+ChessBoard g_chessBoard = {0};
 Piece g_currentPlayer = PLAYER_1;  // 黑棋先行
 GameResources g_gameResources = {0};
-WindowSize g_window_size;
-PositionStack g_positionStack;
+WindowSize g_window_size = {0};
+PositionStack g_positionStack = {0};
 GameResult g_whowin = NOTEND;
 int g_blackScore = 0, g_whiteScore = 0;
 int main() {  // 主函数开始
@@ -22,7 +22,7 @@ int main() {  // 主函数开始
   PlayMusicStream(g_gameResources.MenuBGM);
   while (!WindowShouldClose() && ButtonPage != -1) {
     // 主循环从此处开始
-    Button** buttons;
+    Button** buttons = {0};
     int buttonCount = 0;
 
     // 帧逻辑更新开始
