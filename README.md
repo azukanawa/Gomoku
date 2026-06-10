@@ -13,7 +13,7 @@
 - [x] 黑白方胜负局数统计与显示
 
 ## 1. 如何运行项目
-- 方法一：使用CMake进行编译，编译好后将本项目的res文件夹放到跟可执行文件同级的目录下(优化等级最多开到O2，请不要开启O3优化，这种优化程度极易导致程序崩溃)
+- 方法一：使用CMake进行编译，编译好后将本项目的res文件夹放到跟可执行文件同级的目录下
 - 方法二：或者下载我们已经编译好的release  
 [Windows](https://github.com/azukanawa/Gomoku/releases/download/v1.0.1/x86_64_windows_v1.0.1.zip)  
 [Linux](https://github.com/azukanawa/Gomoku/releases/download/v1.0.1/x86_64_linux_v1.0.1.zip)  
